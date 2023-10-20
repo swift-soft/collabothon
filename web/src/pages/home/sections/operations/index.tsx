@@ -1,79 +1,48 @@
-import {Box, Image, Link, Text} from '@chakra-ui/react'
+import {Box, Image, Spinner, Text} from '@chakra-ui/react'
+import {Link} from 'react-router-dom'
 
-interface Operation {
-  date: string
-  description: string
-  amount: string
-}
-
-const operations: Operation[] = [
-  {
-    date: '27 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '27 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '27 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '27 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '27 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '26 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '26 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  {
-    date: '28 February',
-    description: 'Transfer for your goals',
-    amount: '-4,01 PLN',
-  },
-  // Add more operations as needed
-]
+import {Transaction} from '@/api/models'
+import {selectProfile} from '@/auth/state'
+import useListQuery from '@/common/hooks/use-list-query'
+import {useAppSelector} from '@/store'
+import {formatMoney, formatTransactionDate} from '@/utils/string'
 
 const Operations = () => {
-  const groupedOperations: {[key: string]: Operation[]} = operations.reduce((acc, operation) => {
-    const date = operation.date
+  const user = useAppSelector(selectProfile)
+
+  const {data, loading} = useListQuery<Transaction, 'object'>({
+    from: 'user_transactions',
+    order: 'created_at',
+    descending: true,
+    returnType: 'object',
+    limit: 10,
+  })
+
+  const groupedByDay: {[key: string]: Transaction[]} = data.reduce((acc, transaction) => {
+    const date = formatTransactionDate(transaction.created_at)
     if (!acc[date]) {
       acc[date] = []
     }
-    acc[date].push(operation)
+    acc[date].push(transaction)
     return acc
   }, {})
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <Box>
       <Text fontSize="xl" fontWeight="semibold" mt={2}>
-        Previous operations:
+        Last operations
       </Text>
-      {Object.entries(groupedOperations).map(([date, operationsForDate]) => (
+      {Object.entries(groupedByDay).map(([date, transactions]) => (
         <Box mt={4} key={date}>
           <Text fontSize="lg" fontWeight="normal">
             {date}
           </Text>
           <Box marginTop="1px" marginBottom="20px" borderBottom="2px" borderColor="blackAlpha.500" />
-          {operationsForDate.map((operation, index) => (
+          {transactions.map((transaction, index) => (
             <Box key={index}>
-              <Link>
+              <Link to={`transaction/${transaction.id}`}>
                 <Box mb={3} display="inline-flex" width="100%">
                   <Image
                     src="https://cdn-icons-png.flaticon.com/512/876/876784.png"
@@ -82,8 +51,10 @@ const Operations = () => {
                     height="20px"
                     marginRight="10px"
                   />
-                  <Text>{operation.description}</Text>
-                  <Text marginLeft="auto">{operation.amount}</Text>
+                  <Text>{transaction.title}</Text>
+                  <Text marginLeft="auto">{`${
+                    user?.account_number === transaction.source_account ? '-' : ''
+                  } ${formatMoney(transaction.amount)}`}</Text>
                 </Box>
               </Link>
             </Box>
