@@ -20,7 +20,7 @@ const Router = () => (
       <Route path="history" element={<HistoryPage />} />
       <Route path="tests" element={<TestsPage />} />
       <Route path="profile" element={<ProfilePage />} />
-      <Route path="transaction-details/:id">
+      <Route path="transaction/:id">
         <Route index element={<TransactionDetailsPage />} />
         <Route path="receipt" element={<ReceiptDetailsPage />} />
       </Route>
