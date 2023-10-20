@@ -14,12 +14,12 @@ const Navbar = () => {
 
   return (
     <Box
-      position="absolute"
+      position="fixed"
       top={`calc(100vh - ${NAVBAR_HEIGHT})`}
       width={'100%'}
       fontSize={'x-large'}
       height={NAVBAR_HEIGHT}
-      backgroundColor={'white'}
+      bg="white"
     >
       <Divider border={'2px'} borderColor={'red'} mb={'9px'} w={'93%'} mx={'auto'} />
       <Flex justify={'space-around'}>
