@@ -3,6 +3,10 @@ import React from 'react'
 import {ArrowBackIcon, HamburgerIcon, InfoOutlineIcon} from '@chakra-ui/icons'
 import {Box, Flex, HStack, Spacer, Stack, Text} from '@chakra-ui/react'
 
+import {Transaction} from '@/api/models'
+import {selectProfile} from '@/auth/state'
+import useListQuery from '@/common/hooks/use-list-query'
+import {useAppSelector} from '@/store'
 import {formatTransactionDate} from '@/utils/string.ts'
 
 const transactions = [
@@ -45,6 +49,15 @@ const transactions = [
 ]
 
 const HistoryPage = () => {
+  // const user = useAppSelector(selectProfile)
+
+  const {data} = useListQuery<Transaction, 'object'>({
+    from: 'transactions',
+    returnType: 'object',
+  })
+
+  console.log(data)
+
   return (
     <Box>
       <Flex p="2">
