@@ -1,5 +1,3 @@
-import {useEffect, useState} from 'react'
-
 import {
   Accordion,
   AccordionButton,
@@ -11,6 +9,7 @@ import {
   Center,
   Divider,
   Flex,
+  Spinner,
   Stack,
   Text,
   VStack,
@@ -18,53 +17,23 @@ import {
 import {CiReceipt} from 'react-icons/ci'
 import {RiBankFill, RiShareBoxLine} from 'react-icons/ri'
 import {VscFilePdf} from 'react-icons/vsc'
-import {useParams} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
-import {supabase} from '@/api'
-import {TransactionDetails} from '@/api/models'
-import {selectProfile} from '@/auth/state'
-import {useAppSelector} from '@/store'
 import {formatDate} from '@/utils/string'
 
+import {useTransactionDetails} from './hooks'
+
 const TransactionDetailsPage = () => {
-  const user = useAppSelector(selectProfile)
-  const [isSender, setIsSender] = useState(false)
-
-  const {id} = useParams()
-  const [transaction, setTransaction] = useState<TransactionDetails>()
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      if (!id) return
-
-      try {
-        const {data, error} = await supabase
-          .from('transaction_details')
-          .select()
-          .eq('id', id)
-          .returns<TransactionDetails>()
-
-        if (error) {
-          throw new Error(error.message)
-        } else {
-          setTransaction(data[0])
-          setIsSender(data[0].source_account === user?.account_number)
-          console.log(data[0])
-        }
-      } catch (err) {
-        console.error((err as Error)?.message)
-      }
-    }
-
-    fetchTransactions()
-  }, [id, user])
+  const {transaction, user, isSender} = useTransactionDetails()
 
   const formattedAmount = isSender
     ? '- ' + ((transaction?.amount || 0) / 100).toFixed(2)
     : ((transaction?.amount || 0) / 100).toFixed(2)
 
   return !transaction ? (
-    <Text>Fail</Text>
+    <Center h={'full'}>
+      <Spinner />
+    </Center>
   ) : (
     <Center>
       <VStack w={'100%'} fontSize={'small'}>
@@ -120,20 +89,24 @@ const TransactionDetailsPage = () => {
             </Button>
             <Text fontSize={'x-small'}>Share</Text>
           </Stack>
-          <Stack align={'center'}>
-            <Button
-              height={'auto'}
-              backgroundColor={'inherit'}
-              borderRadius={'full'}
-              color={'red'}
-              fontSize={'4xl'}
-              boxShadow="0px 0px 13px rgba(0, 0, 0, 0.3)"
-              p={3}
-            >
-              <CiReceipt />
-            </Button>
-            <Text fontSize={'x-small'}>Receipt Preview</Text>
-          </Stack>
+          {isSender && (
+            <Stack align={'center'}>
+              <Link to="receipt">
+                <Button
+                  height={'auto'}
+                  backgroundColor={'inherit'}
+                  borderRadius={'full'}
+                  color={'red'}
+                  fontSize={'4xl'}
+                  boxShadow="0px 0px 13px rgba(0, 0, 0, 0.3)"
+                  p={3}
+                >
+                  <CiReceipt />
+                </Button>
+              </Link>
+              <Text fontSize={'x-small'}>Receipt Preview</Text>
+            </Stack>
+          )}
         </Flex>
         <Accordion allowMultiple w={'full'} mt={5}>
           <AccordionItem>
