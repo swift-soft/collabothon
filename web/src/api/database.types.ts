@@ -109,6 +109,12 @@ export interface Database {
             referencedRelation: 'transactions'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'receipts_transaction_id_fkey'
+            columns: ['transaction_id']
+            referencedRelation: 'transaction_details'
+            referencedColumns: ['id']
+          },
         ]
       }
       secrets: {
@@ -168,6 +174,7 @@ export interface Database {
           destination_account: string | null
           id: string
           source_account: string | null
+          title: string
         }
         Insert: {
           accounted_at?: string | null
@@ -176,6 +183,7 @@ export interface Database {
           destination_account?: string | null
           id?: string
           source_account?: string | null
+          title: string
         }
         Update: {
           accounted_at?: string | null
@@ -184,6 +192,7 @@ export interface Database {
           destination_account?: string | null
           id?: string
           source_account?: string | null
+          title?: string
         }
         Relationships: [
           {
@@ -331,6 +340,45 @@ export interface Database {
       }
     }
     Views: {
+      transaction_details: {
+        Row: {
+          accounted_at: string | null
+          amount: number | null
+          created_at: string | null
+          destination_account: string | null
+          destination_account_details: Json | null
+          id: string | null
+          source_account: string | null
+          source_account_details: Json | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'transactions_destination_account_fkey'
+            columns: ['destination_account']
+            referencedRelation: 'accounts'
+            referencedColumns: ['number']
+          },
+          {
+            foreignKeyName: 'transactions_destination_account_fkey'
+            columns: ['destination_account']
+            referencedRelation: 'user_profile'
+            referencedColumns: ['account_number']
+          },
+          {
+            foreignKeyName: 'transactions_source_account_fkey'
+            columns: ['source_account']
+            referencedRelation: 'accounts'
+            referencedColumns: ['number']
+          },
+          {
+            foreignKeyName: 'transactions_source_account_fkey'
+            columns: ['source_account']
+            referencedRelation: 'user_profile'
+            referencedColumns: ['account_number']
+          },
+        ]
+      }
       user_profile: {
         Row: {
           account_number: string | null

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import {Button, Heading, Spinner, Stack} from '@chakra-ui/react'
-import {useNavigate} from 'react-router-dom'
+import {Avatar, Button, HStack, Heading, Spacer, Spinner, Stack, Text} from '@chakra-ui/react'
+import {Navigate, useNavigate} from 'react-router-dom'
 
 import {selectProfile, selectProfileLoading} from '@/auth/state'
 import useSignOut from '@/auth/use-sign-out'
@@ -15,17 +15,24 @@ const ProfilePage = () => {
   const [signOut, signingOut] = useSignOut()
 
   React.useEffect(() => {
-    !user && navigate('/', {replace: true})
+    !user && navigate('/auth', {replace: true})
   }, [user, navigate])
 
   return loading ? (
     <Spinner />
+  ) : !user ? (
+    <Navigate to="/" />
   ) : (
-    <Stack>
-      <Heading>{user?.email}</Heading>
-      <Heading>{user?.full_name}</Heading>
-      <Heading>{user?.phone_number}</Heading>
-      <Button onClick={signOut} isLoading={signingOut}>
+    <Stack h="100%">
+      <HStack>
+        <Avatar name={user?.full_name ?? undefined} />
+        <Heading size="md">{user?.full_name}</Heading>
+      </HStack>
+      <Text>E-mail: {user?.email}</Text>
+      <Text>Phone number: {user?.phone_number}</Text>
+      <Text>Account number: {user?.account_number}</Text>
+      <Spacer />
+      <Button onClick={signOut} isLoading={signingOut} colorScheme="red" variant="outline">
         Sign out
       </Button>
     </Stack>
