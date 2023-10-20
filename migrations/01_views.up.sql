@@ -1,10 +1,28 @@
+create or replace function "get_account_balance"()
+  returns int
+  language sql
+as $$
+  select
+    sum(
+      case
+        when a."number" = t."source_account" then -1 * t."amount"
+        else t."amount"
+      end
+    ) 
+  from "transactions" t
+  join "accounts" a on a."number" = t."source_account" or a."number" = t."destination_account"
+  join "users" u on u."id" = a."user_id"
+  where u."id" = auth.uid();
+$$;
+
 create view "user_profile" as
 select
   u."id",
   u."email",
   u."full_name",
   u."phone_number",
-  a."number" as "account_number"
+  a."number" as "account_number",
+  get_account_balance() as "account_balance"
 from "users" as u
 left join "accounts" a on a."user_id" = u."id"
 where auth.uid() = u."id";
@@ -92,3 +110,11 @@ as $$
     and u."id" = auth.uid()
   group by ri."category"
 $$;
+
+create view "user_transactions" as
+select
+  t.*
+from "transactions" t
+join "accounts" a on a."number" = t."source_account" or a."number" = t."destination_account"
+join "users" u on u."id" = a."user_id"
+where u."id" = auth.uid();

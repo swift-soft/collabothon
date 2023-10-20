@@ -15,7 +15,7 @@ export type SupabaseQueryParams<T extends AnyObject> = {
   order?: Extract<keyof T, string> | Extract<keyof T, string>[]
   descending?: boolean
   match?: Partial<T> // equality filter shorthand
-  limit?: number
+  limit?: number // 10 by default, 0 means no limit
   page?: number
   abortSignal?: AbortSignal
   filter?: FilterBuilderFn<T>
