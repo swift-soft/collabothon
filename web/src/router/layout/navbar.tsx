@@ -1,4 +1,4 @@
-import {Box, Divider, Flex, Text, VStack, calc} from '@chakra-ui/react'
+import {Box, Divider, Flex, Text, VStack} from '@chakra-ui/react'
 import {GoHome} from 'react-icons/go'
 import {PiArrowsLeftRightThin} from 'react-icons/pi'
 import {SlWallet} from 'react-icons/sl'
