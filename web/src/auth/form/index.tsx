@@ -74,8 +74,10 @@ const AuthForm = () => {
   }, [])
 
   return (
-    <Stack spacing={4} w="400px" textAlign="center">
-      <Heading size="xl">{isSignUp ? 'Zarejestruj się' : 'Zaloguj się'}</Heading>
+    <Stack spacing={4} w="100%" textAlign="center">
+      <Heading size="xl">
+        {isSignUp ? "Zarejestruj się" : "Zaloguj się"}
+      </Heading>
       {isSignUp && (
         <HStack>
           <FormControl isRequired isDisabled={loading}>
