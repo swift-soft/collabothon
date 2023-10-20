@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {ArrowBackIcon, HamburgerIcon, InfoOutlineIcon} from '@chakra-ui/icons'
-import {Box, Button, Flex, HStack, Spacer, Stack, Text} from '@chakra-ui/react'
+import {Box, Flex, HStack, Spacer, Stack, Text} from '@chakra-ui/react'
 
 import {formatTransactionDate} from '@/utils/string.ts'
 
@@ -47,40 +47,42 @@ const transactions = [
 const HistoryPage = () => {
   return (
     <Box>
-      <Flex p='2'>
-        <Box color="red" textAlign="center"> 
+      <Flex p="2">
+        <Box color="red" textAlign="center" paddingLeft="2">
           <ArrowBackIcon w={5} h={5}></ArrowBackIcon>
-          <Text fontSize="10px">Back</Text>
+          <Text fontSize="xs">Back</Text>
         </Box>
         <Spacer></Spacer>
         <Box color="red">
-          <Text fontSize="20px" fontWeight="bold">Konto <InfoOutlineIcon fontSize="16px"></InfoOutlineIcon></Text>
+          <Text fontSize="xl" fontWeight="bold" paddingTop="1">
+            Konto <InfoOutlineIcon fontSize="md"></InfoOutlineIcon>
+          </Text>
         </Box>
         <Spacer></Spacer>
-        <Box color="red" textAlign="center">
+        <Box color="red" textAlign="center" paddingRight="2">
           <HamburgerIcon w={5} h={5}></HamburgerIcon>
-          <Text fontSize="10px" >Menu</Text>
+          <Text fontSize="xs">Menu</Text>
         </Box>
       </Flex>
 
       <Stack bgColor="#ededed" padding="10px 14px">
-        <Text fontWeight="bold" fontSize="22px">
+        <Text fontWeight="bold" fontSize="xl">
           Konto Commerzbank
         </Text>
         <Text float="left">6302,21 PLN</Text>
       </Stack>
-      {transactions.map((t) => (
-        <Box key={t.id}>
+      {transactions.map((transaction) => (
+        <Box key={transaction.id}>
           <Box borderBottom="1px" borderColor="lightgray" padding="10px 14px">
             <HStack justify="space-between">
               <Stack>
                 <HStack color="red" fontWeight="bold">
-                  <Text textTransform="uppercase">{formatTransactionDate(t.created_at)}</Text>
+                  <Text textTransform="uppercase">{formatTransactionDate(transaction.created_at)}</Text>
                 </HStack>
-                <Text textTransform="uppercase">{t.name}</Text>
+                <Text textTransform="uppercase">{transaction.name}</Text>
               </Stack>
               <Text></Text>
-              <Text>{((t.amount / 100) * -1).toFixed(2)} PLN</Text>
+              <Text>{((transaction.amount / 100) * -1).toFixed(2)} PLN</Text>
             </HStack>
           </Box>
         </Box>
