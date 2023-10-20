@@ -24,14 +24,41 @@ import {supabase} from '@/api'
 import {selectProfile} from '@/auth/state'
 import {useAppSelector} from '@/store'
 
-interface Transaction {
-  accounted_at: string | null
-  amount: number
-  created_at: string
-  destination_account: string
+interface UserDetails {
   id: string
-  source_account: string
+  email: string
+  full_name: string
+  phone_number: string | null
+}
+
+interface SellerDetails {
+  id: string
+  nip: string | null
+  name: string
+}
+
+interface DestinationAccountDetails {
+  user: UserDetails
+  number: string
+  seller: SellerDetails | null
+}
+
+interface SourceAccountDetails {
+  user: UserDetails
+  number: string
+  seller: SellerDetails | null
+}
+
+interface Transaction {
+  id: string
+  created_at: string
+  accounted_at: string | null
   title: string
+  amount: number
+  source_account: string
+  destination_account: string
+  destination_account_details: DestinationAccountDetails
+  source_account_details: SourceAccountDetails
 }
 
 const formatDate = (dateString: string) => {
@@ -48,13 +75,37 @@ const TransactionDetailsPage = () => {
 
   const {id} = useParams()
   const [transaction, setTransaction] = useState<Transaction>({
-    accounted_at: null,
-    amount: 0,
-    created_at: '',
-    destination_account: '',
     id: '',
-    source_account: '',
+    created_at: '',
+    accounted_at: null,
     title: '',
+    amount: 0,
+    source_account: '',
+    destination_account: '',
+    destination_account_details: {
+      user: {
+        id: '',
+        email: '',
+        full_name: '',
+        phone_number: null,
+      },
+      number: '',
+      seller: {
+        id: '',
+        nip: null,
+        name: '',
+      },
+    },
+    source_account_details: {
+      user: {
+        id: '',
+        email: '',
+        full_name: '',
+        phone_number: null,
+      },
+      number: '',
+      seller: null,
+    },
   })
 
   useEffect(() => {
@@ -69,6 +120,7 @@ const TransactionDetailsPage = () => {
         } else {
           setTransaction(data[0])
           setIsSender(data[0].source_account === user.account_number)
+          console.log(data[0])
         }
       } catch (err) {
         console.error((err as Error)?.message)
@@ -167,8 +219,8 @@ const TransactionDetailsPage = () => {
                   <Text color={'gray.400'}>{isSender ? 'Receiver' : 'Sender'}</Text>
                   <Text>
                     {isSender
-                      ? transaction.destination_account_details.seller.name.toUpperCase()
-                      : transaction.destination_account_details.seller.name.toUpperCase()}
+                      ? transaction.destination_account_details.seller?.name.toUpperCase()
+                      : transaction.source_account_details.user.full_name.toUpperCase()}
                   </Text>
                 </Stack>
                 <Stack gap={0}>
