@@ -64,3 +64,31 @@ left join lateral (
 where 
   (da."destination_account_details"->'user'->>'id')::uuid = auth.uid()
   or (sa."source_account_details"->'user'->>'id')::uuid = auth.uid();
+
+create or replace function "get_user_stats"("from" timestamptz, "to" timestamptz)
+  returns table (
+    "category" text,
+    "total" numeric,
+    "products" jsonb[]
+  )
+  language sql
+as $$
+  select
+    ri."category",
+    sum(ri."price" * ri."amount") as "total",
+    array_agg(jsonb_build_object(
+      'name', ri."name",
+      'price', ri."price",
+      'amount', ri."amount"::int,
+      'date', t."created_at"
+    )) as "products"
+  from "receipt_items" ri
+  inner join "receipts" r on r."id" = ri."receipt_id"
+  inner join "transactions" t on t."id" =  r."transaction_id"
+  inner join "accounts" a on a."number" = t."source_account"
+  inner join "users" u on u."id" = a."user_id"
+  where 
+    t."created_at" between "from" and "to"
+    and u."id" = auth.uid()
+  group by ri."category"
+$$;
