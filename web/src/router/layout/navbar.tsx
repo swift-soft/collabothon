@@ -19,6 +19,7 @@ const Navbar = () => {
       width={'100%'}
       fontSize={'x-large'}
       height={NAVBAR_HEIGHT}
+      backgroundColor={'white'}
     >
       <Divider border={'2px'} borderColor={'red'} mb={'9px'} w={'93%'} mx={'auto'} />
       <Flex justify={'space-around'}>
