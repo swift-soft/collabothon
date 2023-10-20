@@ -72,7 +72,7 @@ const AuthForm = () => {
   }, []);
 
   return (
-    <Stack spacing={4} w="400px" textAlign="center">
+    <Stack spacing={4} w="100%" textAlign="center">
       <Heading size="xl">
         {isSignUp ? "Zarejestruj się" : "Zaloguj się"}
       </Heading>
