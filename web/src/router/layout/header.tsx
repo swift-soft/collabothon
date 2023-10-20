@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
+import {Flex, Text} from '@chakra-ui/react'
 
 const Header = () => (
   <Flex
@@ -13,6 +13,6 @@ const Header = () => (
   >
     <Text>Header</Text>
   </Flex>
-);
+)
 
-export default Header;
+export default Header
