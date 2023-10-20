@@ -1,9 +1,11 @@
 import { Stack } from "@chakra-ui/react";
 import { Outlet } from "react-router";
+import Navbar from "./Navbar";
 
 const Layout = () => (
-  <Stack p={4} minH="100vh">
+  <Stack minH="100vh">
     <Outlet />
+    <Navbar />
   </Stack>
 );
 
