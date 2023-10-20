@@ -1,5 +1,6 @@
 import React from 'react'
 
+import {Center} from '@chakra-ui/react'
 import {useNavigate} from 'react-router-dom'
 
 import AuthForm from '@/auth/form'
@@ -14,7 +15,11 @@ const AuthPage = () => {
     user && navigate('/', {replace: true})
   }, [user, navigate])
 
-  return <AuthForm />
+  return (
+    <Center p={4} py={12}>
+      <AuthForm />
+    </Center>
+  )
 }
 
 export default AuthPage

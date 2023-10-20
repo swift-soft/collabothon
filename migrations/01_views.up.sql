@@ -118,3 +118,20 @@ from "transactions" t
 join "accounts" a on a."number" = t."source_account" or a."number" = t."destination_account"
 join "users" u on u."id" = a."user_id"
 where u."id" = auth.uid();
+
+create view "receipts_joined" as
+select
+  r.*,
+  coalesce(ri."items", '[]'::jsonb) as "items"
+from "receipts" r
+left join lateral (
+  select 
+    jsonb_agg(jsonb_build_object(
+      'name', ri."name",
+      'price', ri."price",
+      'amount', ri."amount",
+      'category', ri."category"
+    )) as "items"
+  from "receipt_items" ri 
+  where ri."receipt_id" = r."id"
+) ri on true;

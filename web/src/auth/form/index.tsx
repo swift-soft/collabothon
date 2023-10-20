@@ -37,7 +37,6 @@ const AuthForm = () => {
   const toasts = React.useMemo(
     () => ({
       onErrorToast: isSignUp ? 'Failed to register' : 'Failed to log in',
-      onSuccessToast: 'Welcome!',
     }),
     [isSignUp]
   )
@@ -75,14 +74,12 @@ const AuthForm = () => {
 
   return (
     <Stack spacing={4} w="100%" textAlign="center">
-      <Heading size="xl">
-        {isSignUp ? "Zarejestruj się" : "Zaloguj się"}
-      </Heading>
+      <Heading size="xl">{isSignUp ? 'Register' : 'Sign in'}</Heading>
       {isSignUp && (
         <HStack>
           <FormControl isRequired isDisabled={loading}>
             <Input
-              placeholder="Imię"
+              placeholder="Name"
               name="firstName"
               variant="filled"
               onChange={handleInputChange}
@@ -102,14 +99,14 @@ const AuthForm = () => {
       )}
       <FormControl isRequired isDisabled={loading} isInvalid={!!input.email && !isEmail(input.email)}>
         <Input
-          placeholder="Adres e-mail"
+          placeholder="E-mail"
           type="email"
           name="email"
           variant="filled"
           value={input.email}
           onChange={handleInputChange}
         />
-        <FormErrorMessage>Niepoprawny adres e-mail</FormErrorMessage>
+        <FormErrorMessage>Invalid e-mail</FormErrorMessage>
       </FormControl>
       {isSignUp && (
         <FormControl isRequired isDisabled={loading}>
@@ -124,14 +121,14 @@ const AuthForm = () => {
       )}
       <FormControl isRequired isDisabled={loading}>
         <Input
-          placeholder="Hasło"
+          placeholder="Password"
           type="password"
           name="password"
           variant="filled"
           value={input.password ?? ''}
           onChange={handleInputChange}
         />
-        <FormErrorMessage>Hasło musi składać się przynajmniej z 6 znaków</FormErrorMessage>
+        <FormErrorMessage>Password must be at least 6 characters long</FormErrorMessage>
       </FormControl>
       {isSignUp && (
         <FormControl
@@ -140,25 +137,22 @@ const AuthForm = () => {
           isInvalid={!!input.repeatPassword && input.password !== input.repeatPassword}
         >
           <Input
-            placeholder="Powtórz hasło"
+            placeholder="Repeat password"
             type="password"
             name="repeatPassword"
             variant="filled"
             value={input.repeatPassword ?? ''}
             onChange={handleInputChange}
           />
-          <FormErrorMessage>Hasła nie są identyczne</FormErrorMessage>
+          <FormErrorMessage>Password are different</FormErrorMessage>
         </FormControl>
       )}
-      <Button variant="link" color="blue.400" fontSize="sm">
-        Nie pamiętasz hasła?
+      <Button variant="link" color="red.400" fontSize="sm">
+        Forgot password?
       </Button>
       <Button
-        bg="blue.400"
         color="white"
-        _hover={{
-          bg: 'blue.500',
-        }}
+        colorScheme="red"
         size="sm"
         isLoading={loading}
         isDisabled={!input.email || !input.password}
@@ -169,7 +163,7 @@ const AuthForm = () => {
       <Flex direction="row" alignItems="center">
         <Divider flex={1} />
         <Text fontSize="xs" mx={2} color="gray.200">
-          {isSignUp ? 'Masz już konto?' : 'Jesteś tu nowy?'}
+          {isSignUp ? 'Already have an account?' : 'New here?'}
         </Text>
         <Divider flex={1} />
       </Flex>
@@ -182,7 +176,7 @@ const AuthForm = () => {
         onClick={onToggle}
         isDisabled={loading}
       >
-        {isSignUp ? 'Zaloguj się' : 'Zarejestruj się'}
+        {isSignUp ? 'Sign in' : 'Register'}
       </Button>
     </Stack>
   )
