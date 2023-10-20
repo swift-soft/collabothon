@@ -1,6 +1,5 @@
 import {Box, Button, Flex, Heading, Link, Stack, Text} from '@chakra-ui/react'
-// import Carousel from "react-bootstrap/Carousel";
-import {ButtonBack, ButtonNext, CarouselProvider, Dot, Slide, Slider} from 'pure-react-carousel'
+import {CarouselProvider, Dot, Slide, Slider} from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 
 import './style.css'
@@ -57,7 +56,9 @@ const Hero = () => {
               height="100%"
               width="100%"
             >
-              <h1>Recieve e-receipt</h1>
+              <Text fontWeight="semibold" fontSize="2xl">
+                Recieve e-receipt
+              </Text>
               <Box display="flex" justifyContent="center" width="100%" margin="auto">
                 <img
                   src="https://www.freeiconspng.com/thumbs/barcode/barcode-background-png-6.png"
