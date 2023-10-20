@@ -7,7 +7,7 @@ import './style.css'
 const Hero = () => {
   return (
     <Box height="fit-content">
-      <CarouselProvider naturalSlideWidth={16} naturalSlideHeight={9} totalSlides={2}>
+      <CarouselProvider infinite={true} naturalSlideWidth={16} naturalSlideHeight={9} totalSlides={2}>
         <Slider>
           <Slide index={0}>
             <Stack
