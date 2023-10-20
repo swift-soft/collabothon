@@ -19,7 +19,7 @@ const Router = () => (
       <Route path="history" element={<HistoryPage />} />
       <Route path="tests" element={<TestsPage />} />
       <Route path="profile" element={<ProfilePage />} />
-      <Route path="transaction-details/:id" element={<TransactionDetailsPage />} />
+      <Route path="transaction/:id" element={<TransactionDetailsPage />} />
     </Route>
 
     <Route path="*" element={<Navigate to={{pathname: '/'}} />} />
