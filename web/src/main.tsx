@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import "@fontsource/open-sans/700.css";
 import "@fontsource/raleway/400.css";
 import "@fontsource/roboto";
@@ -15,7 +15,6 @@ import theme, { ToastContainer } from "./theme";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ChakraProvider
         theme={theme}
         toastOptions={{ defaultOptions: { isClosable: true } }}

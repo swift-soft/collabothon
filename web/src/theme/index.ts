@@ -2,15 +2,11 @@ import { createStandaloneToast, extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "dark",
+    initialColorMode: "light",
     useSystemColorMode: true,
   },
   styles: {
     global: {
-      body: {
-        bg: "gray.900",
-        color: "white",
-      },
       "::-webkit-scrollbar": {
         cursor: "auto",
         width: "0.5rem",
