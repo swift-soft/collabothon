@@ -1,44 +1,44 @@
-import { createStandaloneToast, extendTheme } from "@chakra-ui/react";
+import {createStandaloneToast, extendTheme} from '@chakra-ui/react'
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "light",
+    initialColorMode: 'light',
     useSystemColorMode: true,
   },
   styles: {
     global: {
-      "::-webkit-scrollbar": {
-        cursor: "auto",
-        width: "0.5rem",
-        h: "0.5rem",
+      '::-webkit-scrollbar': {
+        cursor: 'auto',
+        width: '0.5rem',
+        h: '0.5rem',
       },
-      "::-webkit-scrollbar-thumb": {
-        cursor: "pointer !important",
-        "&:hover": {
-          bg: "blue.700",
+      '::-webkit-scrollbar-thumb': {
+        cursor: 'pointer !important',
+        '&:hover': {
+          bg: 'blue.700',
         },
-        bg: "gray.600",
-        borderRadius: "full",
+        bg: 'gray.600',
+        borderRadius: 'full',
       },
-      "::-webkit-scrollbar-track": {
-        bg: "blackAlpha.600",
-        borderRadius: "full",
+      '::-webkit-scrollbar-track': {
+        bg: 'blackAlpha.600',
+        borderRadius: 'full',
       },
     },
   },
   shadows: {
-    glowWhite: "0px 0px 18px 0px rgba(125, 181, 228, 1)",
-    glowBlue: "0px 0px 18px 0px rgba(58, 197, 253, 0.82)",
+    glowWhite: '0px 0px 18px 0px rgba(125, 181, 228, 1)',
+    glowBlue: '0px 0px 18px 0px rgba(58, 197, 253, 0.82)',
   },
   fonts: {
     heading: `'Open Sans', sans-serif`,
     body: `'Roboto', sans-serif`,
   },
-});
+})
 
-export const { ToastContainer, toast } = createStandaloneToast({
+export const {ToastContainer, toast} = createStandaloneToast({
   theme,
-  defaultOptions: { isClosable: true },
-});
+  defaultOptions: {isClosable: true},
+})
 
-export default theme;
+export default theme
