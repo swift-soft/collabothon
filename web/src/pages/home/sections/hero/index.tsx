@@ -1,4 +1,4 @@
-import {Box, Button, Flex, Image, Spacer, Stack, Text} from '@chakra-ui/react'
+import {Box, Flex, Image, Spacer, Stack, Text} from '@chakra-ui/react'
 import {CarouselProvider, Dot, Slide, Slider} from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import {Link} from 'react-router-dom'
@@ -69,13 +69,14 @@ const Hero = () => (
           </Stack>
         </Slide>
       </Slider>
-      <Flex justify="center" mt={0} gap={4}>
-        <Dot slide={0} color="black">
-          <Button colorScheme="red" w="40px" h="10px" bg="red.200" />
-        </Dot>
-        <Dot slide={1} color="black">
-          <Button colorScheme="red" w="40px" h="10px" bg="red.200" />
-        </Dot>
+      <Flex justify="center" mt={2} gap={4}>
+        {Array(2)
+          .fill(0)
+          .map((_, i) => (
+            <Dot slide={i} key={i}>
+              <Box w="40px" h="10px" bg="red.200" rounded="full" />
+            </Dot>
+          ))}
       </Flex>
     </CarouselProvider>
   </Box>

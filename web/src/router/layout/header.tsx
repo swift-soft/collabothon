@@ -1,9 +1,26 @@
-import {ArrowBackIcon, HamburgerIcon, InfoOutlineIcon} from '@chakra-ui/icons'
+import React from 'react'
+
+import {ArrowBackIcon, HamburgerIcon} from '@chakra-ui/icons'
 import {Box, Flex, Spacer, Text} from '@chakra-ui/react'
-import {useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
+
+const pathnameToTitle = {
+  '/transaction': 'Transaction',
+}
 
 const Header = () => {
   const navigate = useNavigate()
+  const {pathname} = useLocation()
+
+  const title = React.useMemo(() => {
+    if (pathname === '/') return 'Home'
+
+    const custom = Object.entries(pathnameToTitle).find(([k]) => pathname.startsWith(k))
+    if (custom) return custom[1]
+
+    const lastPart = pathname.split('/').at(-1) || ''
+    return lastPart[0]?.toUpperCase() + lastPart.slice(1)
+  }, [pathname])
 
   return (
     <Flex
@@ -24,7 +41,7 @@ const Header = () => {
       <Spacer />
       <Box>
         <Text fontSize="xl" fontWeight="bold">
-          Konto <InfoOutlineIcon fontSize="md" />
+          {title}
         </Text>
       </Box>
       <Spacer />
