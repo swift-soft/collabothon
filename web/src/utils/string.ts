@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 export const sentenceCase = (input: string) => _.startCase(_.toLower(input))
 
-export const dateFormat = 'dd  MMM | EEEE'
+export const dateFormat = 'dd  MMM | eeee'
 export const formatTransactionDate = (value?: Date | string | null) =>
   value ? format(new Date(value), dateFormat) : ''
 
@@ -14,3 +14,5 @@ export const formatDate = (value?: Date | string | null) =>
 export const polishTimestampFormat = 'dd.MM.yyyy HH:mm'
 export const formatTimestamp = (value: Date | string | null) =>
   value ? format(new Date(value), polishTimestampFormat) : ''
+
+export const formatMoney = (v?: number | null) => ((v || 0) / 100).toFixed(2)
