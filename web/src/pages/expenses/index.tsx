@@ -1,21 +1,22 @@
 import {
-  Flex,
   Box,
   Tabs,
-  IconButton,
   Text,
   TabList,
   Tab,
   TabPanels,
   TabPanel,
-  Container,
-  Spacer,
   List,
   ListItem,
   ListIcon,
+  Button,
+  Flex,
 } from "@chakra-ui/react";
 import { CalendarIcon } from "@chakra-ui/icons";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Label } from "recharts";
+import { useState } from "react";
+import { format } from "date-fns";
+import { dayDateFormat, weekDateFormat, monthDateFormat, yearDateFormat } from "@/utils/string";
 
 const data = [
   { name: "Group A", value: 400 },
@@ -26,86 +27,60 @@ const data = [
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const ExpensesPage = () => {
-  return (
-    <>
-      <Box>
-        <Tabs>
-          <TabList>
-            <Tab
-              _selected={{
-                color: "red.800",
-                borderColor: "red.800",
-                fontWeight: "bold",
-              }}
-            >
-              Day
-            </Tab>
-            <Tab
-              _selected={{
-                color: "red.800",
-                borderColor: "red.800",
-                fontWeight: "bold",
-              }}
-            >
-              Week
-            </Tab>
-            <Tab
-              _selected={{
-                color: "red.800",
-                borderColor: "red.800",
-                fontWeight: "bold",
-              }}
-            >
-              Month
-            </Tab>
-            <Tab
-              _selected={{
-                color: "red.800",
-                borderColor: "red.800",
-                fontWeight: "bold",
-              }}
-            >
-              Year
-            </Tab>
-            <Tab
-              _selected={{
-                color: "red.800",
-                borderColor: "red.800",
-                fontWeight: "bold",
-              }}
-            >
-              Period
-            </Tab>
-          </TabList>
+type DateRange = 'day' | 'week' | 'month' | 'year'
 
-          {/* <TabPanels>
-            <TabPanel>
-              <Text></Text>
-            </TabPanel>
-            <TabPanel>
-              <Text></Text>
-            </TabPanel>
-          </TabPanels> */}
-        </Tabs>
+const buttons: DateRange[] = ['day', 'week', 'month', 'year']
+
+const dateFormats: { [key in DateRange]: string } = {
+    day: dayDateFormat,
+    week: weekDateFormat,
+    month: monthDateFormat,
+    year: yearDateFormat,
+};
+
+const ExpensesPage = () => {
+  const [active, setActive] = useState<DateRange>('day')
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
+  const formatDate = (value: Date | string | null) =>
+    value ? format(new Date(value), dateFormats[active]) : "";
+
+  return (
+    <Box position="relative" width={'100%'} height={'100%'} p={0}>
+      <Flex>
+        {buttons.map(b => <Button 
+          key={b}
+          onClick={() => setActive(b)}
+          color={active === b ? 'red' : 'black'}
+          borderBottom={active === b ? "2px solid red" : "2px solid transparent"}
+          bg="transparent"
+          boxShadow='none'
+          _hover={{bg:"white"}}
+          _active={{ bg: "white", boxShadow: "none" }}
+          flex='1'
+          rounded='none'
+
+        >{b}</Button>)}
+        </Flex>
         <Text
           textAlign="center"
           mt="10px"
-          fontSize="18px"
+          fontSize="22px"
           style={{ textDecoration: "underline" }}
+        align="center"
+        mb="20px"
         >
-          Today, 20 October
+          {formatDate(currentDate)}
         </Text>
-
-        <Flex justify="center" p={0}>
-          <PieChart width={800} height={400}>
+      <ResponsiveContainer>
+          <PieChart  width={280} height={280}>
             <Pie
               data={data}
-              cy={150}
-              innerRadius={105}
-              outerRadius={140}
+              cy={100}
+              innerRadius={80}
+              outerRadius={105}
               fill="#8884d8"
-              paddingAngle={5}
+              paddingAngle={2}
               dataKey="value"
             >
               {data.map((entry, index) => (
@@ -120,23 +95,22 @@ const ExpensesPage = () => {
                 position="center"
                 fill="grey"
                 style={{
-                  fontSize: "32px",
+                  fontSize: "30px",
                   fontWeight: "bold",
                   fontFamily: "Roboto",
                 }}
               />
             </Pie>
-          </PieChart>
-        </Flex>
-      </Box>
+        </PieChart>
+        </ResponsiveContainer>
 
       <List color="white" fontSize="1.2em" spacing={4} p="20px">
           <ListItem>
           <ListIcon as={CalendarIcon} color="white"></ListIcon>
           <Text>DashBoard</Text>
           </ListItem>
-    </List>
-    </>
+        </List>
+        </Box>
   );
 };
 
