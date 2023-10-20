@@ -447,11 +447,30 @@ export interface Database {
         }
         Returns: string
       }
+      get_random_category: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_random_name: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_secret: {
         Args: {
           name: string
         }
         Returns: string
+      }
+      get_user_stats: {
+        Args: {
+          from: string
+          to: string
+        }
+        Returns: {
+          category: string
+          total: number
+          products: Json[]
+        }[]
       }
     }
     Enums: {

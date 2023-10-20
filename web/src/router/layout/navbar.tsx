@@ -13,7 +13,13 @@ const Navbar = () => {
   const isLinkActive = (page) => location.pathname === page
 
   return (
-    <Box position="fixed" bottom={0} width={'100%'} fontSize={'x-large'} height={NAVBAR_HEIGHT}>
+    <Box
+      position="absolute"
+      top={`calc(100vh - ${NAVBAR_HEIGHT})`}
+      width={'100%'}
+      fontSize={'x-large'}
+      height={NAVBAR_HEIGHT}
+    >
       <Divider border={'2px'} borderColor={'red'} mb={'9px'} w={'93%'} mx={'auto'} />
       <Flex justify={'space-around'}>
         <Link to={'/'} style={{color: isLinkActive('/') ? 'red' : 'inherit'}}>
