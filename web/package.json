@@ -21,6 +21,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@reduxjs/toolkit": "^1.9.7",
     "@supabase/supabase-js": "^2.38.2",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "apexcharts": "^3.44.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",

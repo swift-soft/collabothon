@@ -1,48 +1,48 @@
-import * as React from "react";
+import * as React from 'react'
 
-import { useToast } from "@chakra-ui/react";
+import {useToast} from '@chakra-ui/react'
 
 type Options = {
-  onErrorToast?: string;
-  onSuccessToast?: string;
-};
+  onErrorToast?: string
+  onSuccessToast?: string
+}
 
 const useLoadingState = (
   onSubmit: (args?: any) => Promise<void> | void,
   options?: Options
 ): [(args?: any) => Promise<void>, boolean, Error | null] => {
-  const toast = useToast();
+  const toast = useToast()
 
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<Error | null>(null);
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState<Error | null>(null)
 
   const handleSubmit = React.useCallback(
     async (args?: any) => {
-      setLoading(true);
+      setLoading(true)
       try {
-        await onSubmit(args);
+        await onSubmit(args)
 
         options?.onSuccessToast &&
           toast({
-            status: "success",
+            status: 'success',
             title: options.onSuccessToast,
-          });
+          })
       } catch (e) {
-        setError(e as Error);
-        console.error(e as Error);
+        setError(e as Error)
+        console.error(e as Error)
         options?.onErrorToast &&
           toast({
-            status: "error",
+            status: 'error',
             title: options.onErrorToast,
-          });
+          })
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     },
     [onSubmit, options, toast]
-  );
+  )
 
-  return [handleSubmit, loading, error];
-};
+  return [handleSubmit, loading, error]
+}
 
-export default useLoadingState;
+export default useLoadingState

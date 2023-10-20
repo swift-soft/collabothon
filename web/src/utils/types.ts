@@ -1,14 +1,14 @@
-export type AnyObject = Record<string, unknown>;
+export type AnyObject = Record<string, unknown>
 
 export type CommonModalProps = {
-  open: boolean;
-  onClose: () => void;
-  onComplete?: () => void;
-};
+  open: boolean
+  onClose: () => void
+  onComplete?: () => void
+}
 
 export type SelectOption<T = string> = {
-  label: string;
-  value: T;
-};
+  label: string
+  value: T
+}
 
-export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>
