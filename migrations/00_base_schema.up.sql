@@ -31,7 +31,7 @@ end;
 $$ ;
 
 create trigger "on_auth_user_created"
-after insert or update on auth."users"
+after insert on auth."users"
 for each row execute procedure public."handle_new_user"();
 
 -- secrets
@@ -58,7 +58,7 @@ create table "accounts" (
 
 create table "sellers" (
   "id" uuid primary key default uuid_generate_v4(),
-  "account_number" text not null references "accounts"("number"),
+  "account_number" text not null references "accounts"("number") on delete cascade,
   "name" text not null,
   "nip" text
 );
@@ -68,9 +68,10 @@ create table "transactions" (
     "id" uuid primary key default uuid_generate_v4(),
     "created_at" timestamptz not null default now(),
     "accounted_at" timestamptz,
+    "title" text not null,
     "amount" int not null default 0,
-    "source_account" text references "accounts"("number"),
-    "destination_account" text references "accounts"("number"),
+    "source_account" text references "accounts"("number") on delete cascade,
+    "destination_account" text references "accounts"("number") on delete cascade,
 
     check(extract(timezone from "created_at") = '0')
 );
@@ -79,8 +80,8 @@ create table "transactions" (
 
 create table "receipts" (
     "id" uuid primary key default uuid_generate_v4(),
-    "seller_id" uuid not null references "sellers"("id"),
-    "transaction_id" uuid not null references "transactions"("id")
+    "seller_id" uuid not null references "sellers"("id") on delete cascade,
+    "transaction_id" uuid not null references "transactions"("id") on delete cascade
 );
 
 create extension if not exists "citext";
@@ -90,11 +91,11 @@ create table "categories" (
 );
 
 create table "receipt_items" (
-  "receipt_id" uuid not null references "receipts"("id"),
+  "receipt_id" uuid not null references "receipts"("id") on delete cascade,
   "name" citext not null,
   "amount" numeric(12,5) not null, -- can be weight or exact count
   "price" int not null,
-  "category" citext references "categories"("name"),
+  "category" citext references "categories"("name") on delete set null,
 
   primary key ("receipt_id", "name") 
 );
@@ -105,8 +106,8 @@ create type transfer_state as enum ('sent', 'received', 'accepted', 'rejected');
 
 create table "transfer_requests" (
   "id" uuid primary key default uuid_generate_v4(),
-  "sender_account" text not null references "accounts"("number"),
-  "recipient_account" text not null references "accounts"("number"),
+  "sender_account" text not null references "accounts"("number") on delete cascade,
+  "recipient_account" text not null references "accounts"("number") on delete cascade,
   
   "title" text not null,
 
@@ -114,11 +115,11 @@ create table "transfer_requests" (
   "decision_at" timestamptz,
   "state" transfer_state not null default 'sent',
 
-  "receipt_id" uuid not null references "receipts"("id")
+  "receipt_id" uuid not null references "receipts"("id") on delete cascade
 );
 
 create table "transfer_request_receipt_items" (
-  "transfer_request_id" uuid not null references "transfer_requests"("id"),
+  "transfer_request_id" uuid not null references "transfer_requests"("id") on delete cascade,
   "name" citext not null,
   "amount" int -- of money
 );
