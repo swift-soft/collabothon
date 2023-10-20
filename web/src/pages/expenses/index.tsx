@@ -9,9 +9,12 @@ import {
   TabPanels,
   TabPanel,
   Container,
-  Spacer
+  Spacer,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { CalendarIcon } from "@chakra-ui/icons";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Label } from "recharts";
 
 const data = [
@@ -25,36 +28,9 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const ExpensesPage = () => {
   return (
-    <Container as="div" maxW="100%" p={0}>
-      <Flex as="nav" bg="red.700" flex="1">
-        <IconButton
-          aria-label="Search database"
-          icon={<ArrowBackIcon />}
-          bg="red.700"
-          borderRadius={40}
-          color="white"
-          size="md"
-          _hover={{
-            outline: "none",
-            boxShadow: "none",
-          }}
-          alignContent="left"
-        />
-        <Spacer />
-        <Box>
-          <Text
-            style={{ fontSize: "15px", color: "white", textAlign: "center" }}
-          >
-            Saldo
-          </Text>
-          <Text sx={{ fontSize: "20px", color: "white", fontWeight: "bold" }}>
-            2500$
-          </Text>
-        </Box>
-        <Spacer />
-      </Flex>
+    <>
       <Box>
-        <Tabs mt="8px">
+        <Tabs>
           <TabList>
             <Tab
               _selected={{
@@ -153,7 +129,14 @@ const ExpensesPage = () => {
           </PieChart>
         </Flex>
       </Box>
-    </Container>
+
+      <List color="white" fontSize="1.2em" spacing={4} p="20px">
+          <ListItem>
+          <ListIcon as={CalendarIcon} color="white"></ListIcon>
+          <Text>DashBoard</Text>
+          </ListItem>
+    </List>
+    </>
   );
 };
 
