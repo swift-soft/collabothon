@@ -5,3 +5,6 @@ export const SUPABASE_KEY =
 
 export const NAVBAR_HEIGHT = '68px'
 export const HEADER_HEIGHT = '68px'
+
+export const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY
+export const OPENAI_API_URL = import.meta.env.VITE_OPENAI_API_URL

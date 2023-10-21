@@ -1,6 +1,10 @@
 import {Navigate, Route, Routes} from 'react-router-dom'
 
+
+import Ai from '@/pages/ai'
+
 import ConfirmAsk from '@/common/components/transferm-notification-model'
+
 import AuthPage from '@/pages/auth'
 import ProfilePage from '@/pages/profile'
 import TestsPage from '@/pages/tests'
@@ -16,6 +20,7 @@ import RequireLoggedIn from './require-logged-in'
 const Router = () => (
   <Routes>
     <Route path="auth" element={<AuthPage />} />
+    <Route path="ai" element={<Ai />} />
 
     <Route element={<Layout />}>
       <Route element={<RequireLoggedIn />}>
