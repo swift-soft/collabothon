@@ -70,7 +70,12 @@ const HistoryPage = () => {
                         <Text>{transaction.title}</Text>
                       </HStack>
                     </Stack>
-                    <Text>{formatMoney(transaction.amount)} PLN</Text>
+                    <Text
+                      color={transaction.source_account === user?.account_number ? 'red.700' : 'green.700'}
+                    >
+                      {transaction.source_account === user?.account_number ? '-' : ''}
+                      {formatMoney(transaction.amount)} PLN
+                    </Text>
                   </HStack>
                 </Link>
               ))}

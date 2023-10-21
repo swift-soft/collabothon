@@ -9,7 +9,9 @@ export type TransferItem = {
   amount?: number
 }
 
+export type TransferItemNoName = Omit<TransferItem, 'name'>
+
 // map item names to transfer request items
-export type TransferItems = Record<string, Omit<TransferItem, 'name'>[]>
+export type TransferItems = Record<string, TransferItemNoName[]>
 
 export type TransferRequestRecipients = Record<string, Omit<TransferItem, 'user'>[]>

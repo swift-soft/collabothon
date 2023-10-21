@@ -32,7 +32,6 @@ export const fetchReceipt = createAsyncThunk('receipt/fetchReceipt', async (tran
     .maybeSingle()
 
   if (error) throw error
-  if (!data) throw new Error('Failed to retrieve receipt for the transaction')
 
   return data as ReceiptJoined
 })

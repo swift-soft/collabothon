@@ -1,19 +1,5 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  Spinner,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import {ChevronDownIcon} from '@chakra-ui/icons'
+import {Box, Button, Center, Divider, Flex, HStack, Spinner, Stack, Text, VStack} from '@chakra-ui/react'
 import {CiReceipt} from 'react-icons/ci'
 import {RiBankFill, RiShareBoxLine} from 'react-icons/ri'
 import {VscFilePdf} from 'react-icons/vsc'
@@ -108,38 +94,37 @@ const TransactionDetailsPage = () => {
             </Stack>
           )}
         </Flex>
-        <Accordion allowMultiple w={'full'} mt={5}>
-          <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box fontSize={'lg'} as="span" flex="1" textAlign="left">
-                  <strong>Details</strong>
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <Stack>
-                <Stack gap={0}>
-                  <Text color={'gray.400'}>{isSender ? 'Receiver' : 'Sender'}</Text>
-                  <Text>
-                    {isSender
-                      ? transaction.destination_account_details.seller?.name.toUpperCase()
-                      : transaction.source_account_details.user.full_name?.toUpperCase()}
-                  </Text>
-                </Stack>
-                <Stack gap={0}>
-                  <Text color={'gray.400'}>{isSender ? "Receiver's account" : "Sender's account"}</Text>
-                  <Text>{isSender ? transaction.destination_account : transaction.source_account}</Text>
-                </Stack>
-                <Stack gap={0}>
-                  <Text color={'gray.400'}>{isSender ? 'Sender' : 'Receiver'}</Text>
-                  <Text>{user?.full_name?.toUpperCase()}</Text>
-                </Stack>
-              </Stack>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+        <Stack w="full" px={4}>
+          <HStack
+            fontSize="lg"
+            flex="1"
+            textAlign="left"
+            borderBottom="1px"
+            borderColor="gray.200"
+            justify="space-between"
+          >
+            <strong>Details</strong>
+            <ChevronDownIcon />
+          </HStack>
+          <Stack>
+            <Stack gap={0}>
+              <Text color={'gray.400'}>{isSender ? 'Receiver' : 'Sender'}</Text>
+              <Text>
+                {isSender
+                  ? transaction.destination_account_details.seller?.name.toUpperCase()
+                  : transaction.source_account_details.user.full_name?.toUpperCase()}
+              </Text>
+            </Stack>
+            <Stack gap={0}>
+              <Text color={'gray.400'}>{isSender ? "Receiver's account" : "Sender's account"}</Text>
+              <Text>{isSender ? transaction.destination_account : transaction.source_account}</Text>
+            </Stack>
+            <Stack gap={0}>
+              <Text color={'gray.400'}>{isSender ? 'Sender' : 'Receiver'}</Text>
+              <Text>{user?.full_name?.toUpperCase()}</Text>
+            </Stack>
+          </Stack>
+        </Stack>
       </VStack>
     </Center>
   )
