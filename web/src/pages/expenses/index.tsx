@@ -7,7 +7,6 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
@@ -15,14 +14,13 @@ import {
   GridItem,
   HStack,
   List,
-  ListIcon,
   ListItem,
   Stack,
   Text,
 } from '@chakra-ui/react'
-import {MdArrowForward} from 'react-icons/md'
 import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
+import {Stat} from '@/api/models'
 import {formatMoney, formatTransactionDate} from '@/utils/string'
 
 import {useStatsState} from './hooks'
@@ -31,20 +29,9 @@ import {foramtTimeRange} from './utils'
 
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
-type ActiveItem = {
-  category: string
-  total: number
-  products: {
-    date: string
-    name: string
-    price: number
-    amount: number
-  }[]
-}
-
 const ExpensesPage = () => {
   const {statistics, range, activeTab, setActiveTab} = useStatsState()
-  const [activeItem, setActiveItem] = useState<ActiveItem | null>(null)
+  const [activeItem, setActiveItem] = useState<Stat | null>(null)
 
   const filteredStats = React.useMemo(
     () => statistics.filter((s) => !!s.total).sort((a, b) => b.total - a.total),
@@ -57,7 +44,7 @@ const ExpensesPage = () => {
 
   const groupedByDay = React.useMemo(() => {
     return activeItem?.products.reduce((acc, expense) => {
-      const date = formatTransactionDate(expense.date) // Change this according to your data structure
+      const date = formatTransactionDate(expense.date)
       if (!acc[date]) {
         acc[date] = []
       }
@@ -65,8 +52,6 @@ const ExpensesPage = () => {
       return acc
     }, {})
   }, [activeItem?.products])
-
-  console.log(groupedByDay)
 
   return (
     <Stack>
@@ -165,7 +150,7 @@ const ExpensesPage = () => {
               </Text>
             </DrawerHeader>
             <DrawerBody>
-              {Object.keys(groupedByDay).map((date) => (
+              {Object.keys(groupedByDay || {}).map((date) => (
                 <Box key={date} pb={3}>
                   <Text
                     fontSize="sm"
@@ -178,19 +163,21 @@ const ExpensesPage = () => {
                   >
                     {date}
                   </Text>
-                  {groupedByDay[date].map((expense, index) => (
-                    <List key={index}>
-                      <ListItem py={3}>
-                        <Flex justify="space-between">
-                          <Text>{expense.name}</Text>
-                          <Text>
-                            {expense.amount} x {formatMoney(expense.price)} zł
-                            {/* it looks much better with zł*/}
-                          </Text>
-                        </Flex>
-                      </ListItem>
-                    </List>
-                  ))}
+                  {groupedByDay
+                    ? groupedByDay[date].map((expense, index) => (
+                        <List key={index}>
+                          <ListItem py={3}>
+                            <Flex justify="space-between">
+                              <Text>{expense.name}</Text>
+                              <Text>
+                                {expense.amount} x {formatMoney(expense.price)} zł
+                                {/* it looks much better with zł*/}
+                              </Text>
+                            </Flex>
+                          </ListItem>
+                        </List>
+                      ))
+                    : null}
                 </Box>
               ))}
             </DrawerBody>
