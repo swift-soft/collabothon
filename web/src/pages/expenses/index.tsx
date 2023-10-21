@@ -47,19 +47,19 @@ const ExpensesPage = () => {
         {!!range && foramtTimeRange(range, activeTab)}
       </Text>
       <Box mb={4}>
-        <ResponsiveContainer height={240}>
-          <PieChart width={240}>
+        <ResponsiveContainer height={240} style={{outline: 'none'}}>
+          <PieChart width={240} style={{outline: 'none'}}>
             <Pie
               data={chartData}
               innerRadius={90}
               outerRadius={120}
-              fill="#8884d8"
               paddingAngle={2}
               nameKey="category"
               dataKey="total"
+              style={{outline: 'none'}}
             >
               {chartData.map((entry) => (
-                <Cell key={entry.category} fill={entry.color || '#c0c0c0'} />
+                <Cell key={entry.category} fill={entry.color || '#07a1ee'} style={{outline: 'none'}} />
               ))}
               <Label
                 value={chartData.length === 1 ? '0 $' : formatMoney(total) + '$'}
@@ -69,6 +69,7 @@ const ExpensesPage = () => {
                   fontSize: '30px',
                   fontWeight: 'bold',
                   fontFamily: 'Roboto',
+                  outline: 'none',
                 }}
               />
             </Pie>
