@@ -68,7 +68,7 @@ const ReceiptDetailsPage = () => {
     </Center>
   ) : (
     <>
-      <Stack mt={2}>
+      <Stack mt={2} pb={splitting ? 10 : 0}>
         <HStack mb={6} justify="space-between" align="flex-start" gap={4}>
           <Stack spacing={0}>
             <Text color="red" fontSize="sm">

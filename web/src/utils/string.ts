@@ -19,4 +19,8 @@ export const dateWithMonethName = 'dd MMMM'
 export const formatDateName = (value: Date | string | null) =>
   value ? format(new Date(value), dateWithMonethName) : ''
 
-export const formatMoney = (v?: number | null) => ((v || 0) / 100).toFixed(2)
+export const formatDateLong = (value?: Date | string | null) =>
+  value ? format(new Date(value), 'dd MMMM yyyy, HH:mm') : ''
+
+export const formatMoney = (v?: number | null) =>
+  ((v || 0) / 100).toLocaleString('pl', {minimumFractionDigits: 2, maximumFractionDigits: 2, currency: 'PLN'})

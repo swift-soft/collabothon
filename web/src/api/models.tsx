@@ -42,3 +42,19 @@ export type ReceiptJoined = Omit<Database['public']['Views']['receipts_joined'][
 }
 
 export type Stats = Database['public']['Functions']['get_user_stats']['Returns']
+
+export type TransferRequest = Database['public']['Tables']['transfer_requests']['Row']
+
+export type TransferRequestDetails = Omit<
+  Database['public']['Views']['transfer_request_details']['Row'],
+  'sender'
+> & {
+  sender: {
+    id: string
+    email: string
+    full_name: string | null
+    phone_number: string | null
+  }
+}
+
+export type TransferRequestState = Database['public']['Enums']['transfer_state']

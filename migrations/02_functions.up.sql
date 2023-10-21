@@ -86,3 +86,33 @@ as $$
   	and a."user_id" = auth.uid()
   ) i on true;
 $$;
+
+create or replace function "accept_transfer_request"("id" uuid)
+  returns void
+  language plpgsql
+  security definer
+as $$
+declare
+  "new_transaction_id" uuid;
+begin
+  insert into "transactions" (
+    "title",
+    "amount",
+    "destination_account",
+    "source_account"
+  ) select
+      trd."title",
+      trd."total",
+      trd."sender_account",
+      (select a."number" from "accounts" a where a."user_id" = auth.uid() limit 1)
+  from "transfer_request_details" trd
+  where trd."id" = accept_transfer_request."id"
+  returning transactions."id" into "new_transaction_id";
+
+  update "transfer_requests" tr set 
+    "state" = 'accepted',
+    "decision_at" = now(),
+    "transaction_id" = "new_transaction_id"
+  where tr."id" = accept_transfer_request."id";
+end
+$$;
