@@ -12,13 +12,13 @@ const ChatPage = () => {
 
   useEffect(() => {
     const fetchItemNames = async () => {
-      const {data, error} = await supabase.from('receipt_items').select()
+      const {data} = await supabase.from('receipt_items').select()
       const names = data?.map((item) => item.name)
       setItems(names)
     }
 
     const fetchCategoryNames = async () => {
-      const {data, error} = await supabase.from('categories').select()
+      const {data} = await supabase.from('categories').select()
       const categories = data?.map((category) => category.name)
       setCategories(categories)
     }

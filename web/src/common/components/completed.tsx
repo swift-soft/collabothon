@@ -1,15 +1,11 @@
-import React from 'react'
-
 import {CheckCircleIcon} from '@chakra-ui/icons'
 import {
   Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Text,
   useDisclosure,
