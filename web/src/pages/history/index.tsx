@@ -6,8 +6,6 @@ import {selectProfile} from '@/auth/state'
 import useListQuery from '@/common/hooks/use-list-query'
 import {useAppSelector} from '@/store'
 import {formatMoney, formatTransactionDate} from '@/utils/string.ts'
-import ConfirmAsk from '@/common/components/transferm-notification-model'
-import Completed from '@/common/components/completed'
 
 const HistoryPage = () => {
   const user = useAppSelector(selectProfile)
@@ -30,8 +28,6 @@ const HistoryPage = () => {
           {formatMoney(user?.account_balance)}
         </Text>
       </Stack>
-      <ConfirmAsk></ConfirmAsk>
-      <Completed></Completed>
       {!data.length ? (
         <Text>No transactions found</Text>
       ) : (

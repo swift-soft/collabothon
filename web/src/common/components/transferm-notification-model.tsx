@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {ChevronDownIcon} from '@chakra-ui/icons'
 import {
   Box,
@@ -9,7 +7,6 @@ import {
   Heading,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -21,11 +18,12 @@ import {
 
 const ConfirmAsk = () => {
   const {isOpen, onOpen, onClose} = useDisclosure()
+
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
 
-      <Modal isOpen={false} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign="center" textTransform="uppercase" padding="2">

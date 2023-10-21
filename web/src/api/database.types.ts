@@ -1,4 +1,10 @@
-export type Json = string | number | boolean | null | {[key: string]: Json | undefined} | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export interface Database {
   public: {
@@ -18,33 +24,36 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'accounts_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'accounts_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['id']
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'accounts_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'user_unique_contacts'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
+          }
         ]
       }
       categories: {
         Row: {
+          color: string | null
           name: string
         }
         Insert: {
+          color?: string | null
           name: string
         }
         Update: {
+          color?: string | null
           name?: string
         }
         Relationships: []
@@ -73,23 +82,23 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'receipt_items_category_fkey'
-            columns: ['category']
-            referencedRelation: 'categories'
-            referencedColumns: ['name']
+            foreignKeyName: "receipt_items_category_fkey"
+            columns: ["category"]
+            referencedRelation: "categories"
+            referencedColumns: ["name"]
           },
           {
-            foreignKeyName: 'receipt_items_receipt_id_fkey'
-            columns: ['receipt_id']
-            referencedRelation: 'receipts'
-            referencedColumns: ['id']
+            foreignKeyName: "receipt_items_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipt_items_receipt_id_fkey'
-            columns: ['receipt_id']
-            referencedRelation: 'receipts_joined'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "receipt_items_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts_joined"
+            referencedColumns: ["id"]
+          }
         ]
       }
       receipts: {
@@ -110,29 +119,29 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'receipts_seller_id_fkey'
-            columns: ['seller_id']
-            referencedRelation: 'sellers'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_seller_id_fkey"
+            columns: ["seller_id"]
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transactions'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transaction_details'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transaction_details"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'user_transactions'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          }
         ]
       }
       secrets: {
@@ -171,17 +180,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'sellers_account_number_fkey'
-            columns: ['account_number']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "sellers_account_number_fkey"
+            columns: ["account_number"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'sellers_account_number_fkey'
-            columns: ['account_number']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
-          },
+            foreignKeyName: "sellers_account_number_fkey"
+            columns: ["account_number"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
+          }
         ]
       }
       transactions: {
@@ -214,57 +223,57 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
-          },
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
+          }
         ]
       }
       transfer_request_receipt_items: {
         Row: {
           amount: number | null
           name: string
-          settlement_type: Database['public']['Enums']['transfer_request_item_settlement_type']
+          settlement_type: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id: string
         }
         Insert: {
           amount?: number | null
           name: string
-          settlement_type: Database['public']['Enums']['transfer_request_item_settlement_type']
+          settlement_type: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id: string
         }
         Update: {
           amount?: number | null
           name?: string
-          settlement_type?: Database['public']['Enums']['transfer_request_item_settlement_type']
+          settlement_type?: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'transfer_request_receipt_items_transfer_request_id_fkey'
-            columns: ['transfer_request_id']
-            referencedRelation: 'transfer_requests'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "transfer_request_receipt_items_transfer_request_id_fkey"
+            columns: ["transfer_request_id"]
+            referencedRelation: "transfer_requests"
+            referencedColumns: ["id"]
+          }
         ]
       }
       transfer_requests: {
@@ -275,7 +284,7 @@ export interface Database {
           recipient_user: string
           requested_at: string
           sender_account: string
-          state: Database['public']['Enums']['transfer_state']
+          state: Database["public"]["Enums"]["transfer_state"]
           title: string
           transaction_id: string | null
         }
@@ -286,7 +295,7 @@ export interface Database {
           recipient_user: string
           requested_at?: string
           sender_account: string
-          state?: Database['public']['Enums']['transfer_state']
+          state?: Database["public"]["Enums"]["transfer_state"]
           title: string
           transaction_id?: string | null
         }
@@ -297,71 +306,71 @@ export interface Database {
           recipient_user?: string
           requested_at?: string
           sender_account?: string
-          state?: Database['public']['Enums']['transfer_state']
+          state?: Database["public"]["Enums"]["transfer_state"]
           title?: string
           transaction_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'transfer_requests_receipt_id_fkey'
-            columns: ['receipt_id']
-            referencedRelation: 'receipts'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_receipt_id_fkey'
-            columns: ['receipt_id']
-            referencedRelation: 'receipts_joined'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts_joined"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_recipient_user_fkey'
-            columns: ['recipient_user']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_recipient_user_fkey'
-            columns: ['recipient_user']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_recipient_user_fkey'
-            columns: ['recipient_user']
-            referencedRelation: 'user_unique_contacts'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_sender_account_fkey'
-            columns: ['sender_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transfer_requests_sender_account_fkey"
+            columns: ["sender_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transfer_requests_sender_account_fkey'
-            columns: ['sender_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
+            foreignKeyName: "transfer_requests_sender_account_fkey"
+            columns: ["sender_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
           },
           {
-            foreignKeyName: 'transfer_requests_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transactions'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transaction_details'
-            referencedColumns: ['id']
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transaction_details"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'transfer_requests_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'user_transactions'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          }
         ]
       }
       user_contacts: {
@@ -379,41 +388,41 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_contacts_user_one_fkey'
-            columns: ['user_one']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_contacts_user_one_fkey'
-            columns: ['user_one']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['id']
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_contacts_user_one_fkey'
-            columns: ['user_one']
-            referencedRelation: 'user_unique_contacts'
-            referencedColumns: ['id']
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_contacts_user_two_fkey'
-            columns: ['user_two']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_contacts_user_two_fkey'
-            columns: ['user_two']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['id']
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_contacts_user_two_fkey'
-            columns: ['user_two']
-            referencedRelation: 'user_unique_contacts'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users: {
@@ -437,11 +446,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_id_fkey'
-            columns: ['id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
@@ -455,29 +464,29 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'receipts_seller_id_fkey'
-            columns: ['seller_id']
-            referencedRelation: 'sellers'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_seller_id_fkey"
+            columns: ["seller_id"]
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transactions'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'transaction_details'
-            referencedColumns: ['id']
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transaction_details"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'receipts_transaction_id_fkey'
-            columns: ['transaction_id']
-            referencedRelation: 'user_transactions'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          }
         ]
       }
       transaction_details: {
@@ -494,29 +503,29 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
-          },
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
+          }
         ]
       }
       user_profile: {
@@ -530,11 +539,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_id_fkey'
-            columns: ['id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
         ]
       }
       user_transactions: {
@@ -549,29 +558,29 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_destination_account_fkey'
-            columns: ['destination_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
+            foreignKeyName: "transactions_destination_account_fkey"
+            columns: ["destination_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'accounts'
-            referencedColumns: ['number']
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
-            foreignKeyName: 'transactions_source_account_fkey'
-            columns: ['source_account']
-            referencedRelation: 'user_profile'
-            referencedColumns: ['account_number']
-          },
+            foreignKeyName: "transactions_source_account_fkey"
+            columns: ["source_account"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["account_number"]
+          }
         ]
       }
       user_unique_contacts: {
@@ -583,11 +592,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_id_fkey'
-            columns: ['id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
@@ -595,49 +604,49 @@ export interface Database {
       citext:
         | {
             Args: {
-              '': string
+              "": string
             }
             Returns: string
           }
         | {
             Args: {
-              '': boolean
+              "": boolean
             }
             Returns: string
           }
         | {
             Args: {
-              '': unknown
+              "": unknown
             }
             Returns: string
           }
       citext_hash: {
         Args: {
-          '': string
+          "": string
         }
         Returns: number
       }
       citextin: {
         Args: {
-          '': unknown
+          "": unknown
         }
         Returns: string
       }
       citextout: {
         Args: {
-          '': string
+          "": string
         }
         Returns: unknown
       }
       citextrecv: {
         Args: {
-          '': unknown
+          "": unknown
         }
         Returns: string
       }
       citextsend: {
         Args: {
-          '': string
+          "": string
         }
         Returns: string
       }
@@ -666,6 +675,7 @@ export interface Database {
         }
         Returns: {
           category: string
+          color: string
           total: number
           products: Json[]
         }[]
@@ -681,8 +691,11 @@ export interface Database {
       }
     }
     Enums: {
-      transfer_request_item_settlement_type: 'money' | 'percentage' | 'no_of_items'
-      transfer_state: 'sent' | 'received' | 'accepted' | 'rejected'
+      transfer_request_item_settlement_type:
+        | "money"
+        | "percentage"
+        | "no_of_items"
+      transfer_state: "sent" | "received" | "accepted" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -1,90 +1,35 @@
-import { useState } from 'react';
+import React from 'react'
 
+import {Box, Button, Flex, Grid, GridItem, HStack, Stack, Text} from '@chakra-ui/react'
+import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
+import {formatMoney} from '@/utils/string'
 
-import { CalendarIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
-import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
-
-
-
-import { formatDayStats, formatMonthStats, formatWeekStats, formatYearStats } from '@/utils/string';
-
-
-
-import { getUserStats } from './hooks';
-
-
-const statistics = [
-  {name: 'Home and Garden', value: 400},
-  {name: 'Education', value: 300},
-  {name: 'Electronics and Appliances', value: 300},
-  {name: 'Hobby', value: 200},
-  {name: 'Culture', value: 200},
-  {name: 'Automotive', value: 200},
-  {name: 'Travel', value: 200},
-  {name: 'Gifts', value: 200},
-  {name: 'Restaurants', value: 200},
-  {name: 'Family', value: 200},
-  {name: 'Entertainment', value: 200},
-  {name: 'Sports', value: 200},
-  {name: 'Beauty', value: 200},
-  {name: 'Services', value: 200},
-  {name: 'Health', value: 200},
-  {name: 'Animals', value: 200},
-  {name: 'Food', value: 200},
-  {name: 'Other', value: 200},
-]
-
-const COLORS = [
-  '#0088FE',
-  '#00C49F',
-  '#FFBB28',
-  '#FF8042',
-  '#C75E00',
-  '#8400C5',
-  '#0099FF',  
-  '#99FF00',
-  '#FF66B2',
-  '#B2FF66',
-  '#336699',
-  '#FF3366',
-  '#66FF33',
-  '#993366',
-  '#CC6600',
-  '#FF99CC',
-  '#669933',
-  '#FF33CC',
-  '#339933',
-  '#FFCC33',
-]
-
-type DateRange = 'day' | 'week' | 'month' | 'year'
+import {useStatsState} from './hooks'
+import {DateRange} from './types'
+import {foramtTimeRange} from './utils'
 
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
-const dateStats: {[key in DateRange]: (value: Date | string | null) => string} = {
-  day: formatDayStats,
-  week: formatWeekStats,
-  month: formatMonthStats,
-  year: formatYearStats,
-}
-
 const ExpensesPage = () => {
-  const [active, setActive] = useState<DateRange>('day')
-  // const {statistics} = getUserStats()
+  const {statistics, range, activeTab, setActiveTab} = useStatsState()
 
-  const formattedDate = dateStats[active](new Date());
+  const filteredStats = React.useMemo(
+    () => statistics.filter((s) => !!s.total).sort((a, b) => b.total - a.total),
+    [statistics]
+  )
+
+  const total = React.useMemo(() => filteredStats.reduce((sum, s) => sum + s.total, 0), [filteredStats])
 
   return (
-    <Box position="relative" width={'100%'} height={'100%'} p={0}>
+    <Stack>
       <Flex>
         {buttons.map((b) => (
           <Button
             key={b}
-            onClick={() => setActive(b)}
-            color={active === b ? 'red' : 'black'}
-            borderBottom={active === b ? '2px solid red' : '2px solid transparent'}
+            onClick={() => setActiveTab(b)}
+            color={activeTab === b ? 'red' : 'black'}
+            borderBottom={activeTab === b ? '2px solid red' : '2px solid transparent'}
             bg="transparent"
             boxShadow="none"
             _hover={{bg: 'white'}}
@@ -96,50 +41,62 @@ const ExpensesPage = () => {
           </Button>
         ))}
       </Flex>
-      <Text
-        textAlign="center"
-        mt="10px"
-        fontSize="22px"
-        align="center"
-        mb="20px"
-      >
-        {formattedDate}
+      <Text textAlign="center" fontSize="22px" align="center" my={2}>
+        {!!range && foramtTimeRange(range, activeTab)}
       </Text>
-      <ResponsiveContainer height={280}>
-        <PieChart width={280}>
-          <Pie
-            data={statistics}
-            cy={100}
-            innerRadius={80}
-            outerRadius={105}
-            fill="#8884d8"
-            paddingAngle={2}
-            dataKey="value"
-          >
-            {statistics.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-            <Label
-              value="2500$"
-              position="center"
-              fill="grey"
-              style={{
-                fontSize: '30px',
-                fontWeight: 'bold',
-                fontFamily: 'Roboto',
-              }}
-            />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+      <Box mb={4}>
+        <ResponsiveContainer height={240}>
+          <PieChart width={240}>
+            <Pie
+              data={filteredStats}
+              innerRadius={90}
+              outerRadius={120}
+              fill="#8884d8"
+              paddingAngle={2}
+              nameKey="category"
+              dataKey="total"
+            >
+              {filteredStats.map((entry) => (
+                <Cell key={entry.category} fill={entry.color || '#07a1ee'} />
+              ))}
+              <Label
+                value={formatMoney(total) + '$'}
+                position="center"
+                fill="grey"
+                style={{
+                  fontSize: '30px',
+                  fontWeight: 'bold',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </Box>
 
-      <List color="white" fontSize="1.2em" spacing={4} p="20px">
-        <ListItem>
-          <ListIcon as={CalendarIcon} color="white"></ListIcon>
-          <Text>DashBoard</Text>
-        </ListItem>
-      </List>
-    </Box>
+      <Stack>
+        {filteredStats.map((s) => (
+          <Grid gridTemplateColumns="repeat(6, 1fr)" p={4} boxShadow="3d" rounded="xl" columnGap={2}>
+            <GridItem colSpan={3}>
+              <HStack>
+                <Box boxSize={4} rounded="full" bg={s.color} />
+                <Text>{s.category}</Text>
+              </HStack>
+            </GridItem>
+            <GridItem colSpan={1}>
+              <Flex align="center" h="100%" w="100%" justify="end">
+                <Text>{((s.total / total) * 100).toFixed(0)}%</Text>
+              </Flex>
+            </GridItem>
+            <GridItem colSpan={2}>
+              <Flex align="center" h="100%" w="100%" justify="end">
+                <Text>{formatMoney(s.total)}</Text>
+              </Flex>
+            </GridItem>
+          </Grid>
+        ))}
+      </Stack>
+    </Stack>
   )
 }
 
