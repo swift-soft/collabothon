@@ -7,7 +7,9 @@ import {formatMoney} from '@/utils/string'
 
 import {useTransactionDetails} from '../hooks'
 import BillSplittingModal from './bill-splitting-modal'
+import ConfirmTransferModal from './confirm-transfer-modal'
 import ReceiptListItem from './receipt-item'
+import RequestTransferButton from './request-transfer-button'
 import SortByHeaders, {Order} from './sort-by'
 import {
   fetchReceipt,
@@ -110,11 +112,14 @@ const ReceiptDetailsPage = () => {
           <Text>PLN {formatMoney(transaction.amount)}</Text>
         </HStack>
 
-        <HStack fontSize="sm" justify="space-between">
+        <HStack fontSize="sm" justify="space-between" mb={6}>
           <Text>Nr Sys:</Text>
           <Text>8229337271355 7401732383720</Text>
         </HStack>
+
+        <RequestTransferButton />
       </Stack>
+      <ConfirmTransferModal />
       <BillSplittingModal />
     </>
   )

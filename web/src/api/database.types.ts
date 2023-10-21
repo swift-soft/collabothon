@@ -45,12 +45,15 @@ export interface Database {
       }
       categories: {
         Row: {
+          color: string | null
           name: string
         }
         Insert: {
+          color?: string | null
           name: string
         }
         Update: {
+          color?: string | null
           name?: string
         }
         Relationships: []
@@ -672,9 +675,19 @@ export interface Database {
         }
         Returns: {
           category: string
+          color: string
           total: number
           products: Json[]
         }[]
+      }
+      request_transfer: {
+        Args: {
+          title: string
+          receipt_id: string
+          transfer_items?: Json
+          sender?: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

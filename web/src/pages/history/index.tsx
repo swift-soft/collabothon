@@ -28,13 +28,12 @@ const HistoryPage = () => {
           {formatMoney(user?.account_balance)}
         </Text>
       </Stack>
-
       {!data.length ? (
         <Text>No transactions found</Text>
       ) : (
         data.map((transaction) => (
-          <Link to={`/transaction/${transaction.id}`}>
-            <Box key={transaction.id}>
+          <Link key={transaction.id} to={`/transaction/${transaction.id}`}>
+            <Box>
               <Box borderBottom="1px" borderColor="lightgray" padding="10px 14px">
                 <HStack justify="space-between">
                   <Stack>
