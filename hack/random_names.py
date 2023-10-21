@@ -2,7 +2,7 @@ import random
 
 # List of possible words for product names
 adjectives = ['Red', 'Green', 'Blue', 'Small', 'Large', 'Premium', 'Deluxe', 'Super', 'Ultra', 'Classic']
-nouns = ['Shirt', 'Shoes', 'Hat', 'Pants', 'Socks', 'Dress', 'Jacket', 'Jeans', 'Gloves', 'Belt']
+nouns = ['Shirt', 'Pizza', 'Hat', 'Laptop', 'Socks', 'Plant', 'Game', 'Water', 'Soap', 'Burger']
 
 # Generate 100 random product names
 product_names = []
