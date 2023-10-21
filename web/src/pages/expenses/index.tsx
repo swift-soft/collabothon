@@ -21,6 +21,8 @@ const ExpensesPage = () => {
 
   const total = React.useMemo(() => filteredStats.reduce((sum, s) => sum + s.total, 0), [filteredStats])
 
+  const chartData = filteredStats.length > 0 ? filteredStats : [{name: '', total: 1}]
+
   return (
     <Stack>
       <Flex>
@@ -48,7 +50,7 @@ const ExpensesPage = () => {
         <ResponsiveContainer height={240} style={{outline: 'none'}}>
           <PieChart width={240} style={{outline: 'none'}}>
             <Pie
-              data={filteredStats}
+              data={chartData}
               innerRadius={90}
               outerRadius={120}
               paddingAngle={2}
@@ -56,11 +58,11 @@ const ExpensesPage = () => {
               dataKey="total"
               style={{outline: 'none'}}
             >
-              {filteredStats.map((entry) => (
+              {chartData.map((entry) => (
                 <Cell key={entry.category} fill={entry.color || '#07a1ee'} style={{outline: 'none'}} />
               ))}
               <Label
-                value={formatMoney(total) + '$'}
+                value={chartData.length === 1 ? '0 $' : formatMoney(total) + '$'}
                 position="center"
                 fill="grey"
                 style={{

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import React from 'react'
 
-import {startOfDay, sub} from 'date-fns'
+import {startOfDay, startOfMonth, startOfYear, sub} from 'date-fns'
 
 import {supabase} from '@/api'
 import {Stats} from '@/api/models'
@@ -28,14 +28,10 @@ export const useStatsState = () => {
         })
         break
       case 'month':
-        newRange.from = sub(new Date(), {
-          months: 1,
-        })
+        newRange.from = startOfMonth(new Date())
         break
       case 'year':
-        newRange.from = sub(new Date(), {
-          years: 1,
-        })
+        newRange.from = startOfYear(new Date())
     }
     setRange(newRange)
   }, [activeTab])
@@ -51,7 +47,6 @@ export const useStatsState = () => {
           to: range?.to.toUTCString(),
         })
         if (error) throw error
-        console.log(data)
         setStatistics(data)
       } catch (err) {
         console.error((err as Error)?.message)
