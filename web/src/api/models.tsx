@@ -34,3 +34,9 @@ export type TransactionDetails = Omit<
   destination_account_details: TransactionAccountDetails
   source_account_details: TransactionAccountDetails
 }
+
+export type ReceiptItem = Database['public']['Tables']['receipt_items']['Row']
+
+export type ReceiptJoined = Omit<Database['public']['Views']['receipts_joined']['Row'], 'items'> & {
+  items: ReceiptItem[]
+}

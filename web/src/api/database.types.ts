@@ -34,6 +34,12 @@ export interface Database {
             columns: ["user_id"]
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -82,6 +88,12 @@ export interface Database {
             foreignKeyName: "receipt_items_receipt_id_fkey"
             columns: ["receipt_id"]
             referencedRelation: "receipts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipt_items_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts_joined"
             referencedColumns: ["id"]
           }
         ]
@@ -237,16 +249,19 @@ export interface Database {
         Row: {
           amount: number | null
           name: string
+          settlement_type: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id: string
         }
         Insert: {
           amount?: number | null
           name: string
+          settlement_type: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id: string
         }
         Update: {
           amount?: number | null
           name?: string
+          settlement_type?: Database["public"]["Enums"]["transfer_request_item_settlement_type"]
           transfer_request_id?: string
         }
         Relationships: [
@@ -263,31 +278,34 @@ export interface Database {
           decision_at: string | null
           id: string
           receipt_id: string
-          recipient_account: string
+          recipient_user: string
           requested_at: string
           sender_account: string
           state: Database["public"]["Enums"]["transfer_state"]
           title: string
+          transaction_id: string | null
         }
         Insert: {
           decision_at?: string | null
           id?: string
           receipt_id: string
-          recipient_account: string
+          recipient_user: string
           requested_at?: string
           sender_account: string
           state?: Database["public"]["Enums"]["transfer_state"]
           title: string
+          transaction_id?: string | null
         }
         Update: {
           decision_at?: string | null
           id?: string
           receipt_id?: string
-          recipient_account?: string
+          recipient_user?: string
           requested_at?: string
           sender_account?: string
           state?: Database["public"]["Enums"]["transfer_state"]
           title?: string
+          transaction_id?: string | null
         }
         Relationships: [
           {
@@ -297,16 +315,28 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "transfer_requests_recipient_account_fkey"
-            columns: ["recipient_account"]
-            referencedRelation: "accounts"
-            referencedColumns: ["number"]
+            foreignKeyName: "transfer_requests_receipt_id_fkey"
+            columns: ["receipt_id"]
+            referencedRelation: "receipts_joined"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "transfer_requests_recipient_account_fkey"
-            columns: ["recipient_account"]
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
             referencedRelation: "user_profile"
-            referencedColumns: ["account_number"]
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transfer_requests_recipient_user_fkey"
+            columns: ["recipient_user"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "transfer_requests_sender_account_fkey"
@@ -319,6 +349,76 @@ export interface Database {
             columns: ["sender_account"]
             referencedRelation: "user_profile"
             referencedColumns: ["account_number"]
+          },
+          {
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transaction_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transfer_requests_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_contacts: {
+        Row: {
+          user_one: string
+          user_two: string
+        }
+        Insert: {
+          user_one: string
+          user_two: string
+        }
+        Update: {
+          user_one?: string
+          user_two?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_contacts_user_one_fkey"
+            columns: ["user_one"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_contacts_user_two_fkey"
+            columns: ["user_two"]
+            referencedRelation: "user_unique_contacts"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -352,6 +452,40 @@ export interface Database {
       }
     }
     Views: {
+      receipts_joined: {
+        Row: {
+          id: string | null
+          items: Json | null
+          seller_id: string | null
+          transaction_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "receipts_seller_id_fkey"
+            columns: ["seller_id"]
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transaction_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       transaction_details: {
         Row: {
           accounted_at: string | null
@@ -446,6 +580,22 @@ export interface Database {
           }
         ]
       }
+      user_unique_contacts: {
+        Row: {
+          email: string | null
+          full_name: string | null
+          id: string | null
+          phone_number: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
       citext:
@@ -528,6 +678,10 @@ export interface Database {
       }
     }
     Enums: {
+      transfer_request_item_settlement_type:
+        | "money"
+        | "percentage"
+        | "no_of_items"
       transfer_state: "sent" | "received" | "accepted" | "rejected"
     }
     CompositeTypes: {

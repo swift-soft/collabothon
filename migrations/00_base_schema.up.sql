@@ -106,8 +106,10 @@ create type transfer_state as enum ('sent', 'received', 'accepted', 'rejected');
 
 create table "transfer_requests" (
   "id" uuid primary key default uuid_generate_v4(),
+  -- indicate to which account the sender expects the transfer 
   "sender_account" text not null references "accounts"("number") on delete cascade,
-  "recipient_account" text not null references "accounts"("number") on delete cascade,
+  -- recipient can decide from whivh account to pay
+  "recipient_user" uuid not null references "users"("id") on delete cascade,
   
   "title" text not null,
 
@@ -115,11 +117,25 @@ create table "transfer_requests" (
   "decision_at" timestamptz,
   "state" transfer_state not null default 'sent',
 
-  "receipt_id" uuid not null references "receipts"("id") on delete cascade
+  "receipt_id" uuid not null references "receipts"("id") on delete cascade,
+  -- transaction that fulfilled the request
+  "transaction_id" uuid references "transactions"("id") on delete set null
 );
+
+create type transfer_request_item_settlement_type as enum ('money', 'percentage', 'no_of_items');
 
 create table "transfer_request_receipt_items" (
   "transfer_request_id" uuid not null references "transfer_requests"("id") on delete cascade,
   "name" citext not null,
-  "amount" int -- of money
+  "settlement_type" transfer_request_item_settlement_type not null,
+  "amount" int -- of money / percentage / no of items
+);
+
+-- user contacts 
+
+create table "user_contacts" (
+  "user_one" uuid not null references "users"("id") on delete cascade,
+  "user_two" uuid not null references "users"("id") on delete cascade,
+  primary key ("user_one", "user_two"),
+  unique("user_two", "user_one")
 );

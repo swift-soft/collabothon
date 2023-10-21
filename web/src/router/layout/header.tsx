@@ -33,6 +33,7 @@ const Header = () => {
       top={0}
       w="100%"
       bg="white"
+      zIndex="sticky"
     >
       <Box textAlign="center" onClick={() => navigate(-1)}>
         <ArrowBackIcon boxSize={5}></ArrowBackIcon>

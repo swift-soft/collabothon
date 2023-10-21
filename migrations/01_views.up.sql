@@ -135,3 +135,20 @@ left join lateral (
   from "receipt_items" ri 
   where ri."receipt_id" = r."id"
 ) ri on true;
+
+create view "user_unique_contacts" as
+select
+  u.*
+from "users" u
+inner join ( 
+  select distinct "contact" from (
+    select 
+    	case 
+    		when "user_one" = auth.uid() then "user_two"
+    		else "user_one"
+    	end as "contact"
+    from "user_contacts" 
+    where "user_one" = auth.uid() 
+    or "user_two" = auth.uid()
+  ) c
+) c on c."contact" = u."id";
