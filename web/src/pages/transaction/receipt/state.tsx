@@ -13,12 +13,15 @@ export interface ReceiptState {
   splitting: boolean
   activeItem?: ReceiptItem | null
   transferItems: TransferItems
+  confirmRequestOpen: boolean
+  transferTitle?: string
 }
 
 const initialState: ReceiptState = {
   receiptLoading: true,
   splitting: false,
   transferItems: {},
+  confirmRequestOpen: false,
 }
 
 export const fetchReceipt = createAsyncThunk('receipt/fetchReceipt', async (transactionID: string) => {
@@ -55,6 +58,12 @@ export const receiptSlice = createSlice({
     setTransferItems: (state, action: PayloadAction<TransferItems>) => {
       state.transferItems = action.payload
     },
+    setConfirmRequestOpen: (state, action: PayloadAction<boolean>) => {
+      state.confirmRequestOpen = action.payload
+    },
+    setTransferTitle: (state, action: PayloadAction<string>) => {
+      state.transferTitle = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,12 +84,21 @@ export const receiptSlice = createSlice({
   },
 })
 
-export const {resetReceiptState, toggleSplitting, setActiveItem, setTransferItems} = receiptSlice.actions
+export const {
+  resetReceiptState,
+  toggleSplitting,
+  setActiveItem,
+  setTransferItems,
+  setConfirmRequestOpen,
+  setTransferTitle,
+} = receiptSlice.actions
 
 export const selectReceipt = (state: RootState) => state.receipt.receipt
 export const selectReceiptLoading = (state: RootState) => state.receipt.receiptLoading
 export const selectSplitting = (state: RootState) => state.receipt.splitting
 export const selectActiveItem = (state: RootState) => state.receipt.activeItem
 export const selectTransferItems = (state: RootState) => state.receipt.transferItems
+export const selectConfirmTransferOpen = (state: RootState) => state.receipt.confirmRequestOpen
+export const selectTransferTitle = (state: RootState) => state.receipt.transferTitle
 
 export default receiptSlice.reducer

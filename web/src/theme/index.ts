@@ -15,13 +15,13 @@ const theme = extendTheme({
       '::-webkit-scrollbar-thumb': {
         cursor: 'pointer !important',
         '&:hover': {
-          bg: 'blue.700',
+          bg: 'red.700',
         },
-        bg: 'gray.600',
+        bg: 'red.600',
         borderRadius: 'full',
       },
       '::-webkit-scrollbar-track': {
-        bg: 'blackAlpha.600',
+        bg: 'red.100',
         borderRadius: 'full',
       },
     },

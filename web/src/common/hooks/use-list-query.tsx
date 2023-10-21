@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {useToast} from '@chakra-ui/react'
+
 import {SupabaseQueryParams} from '@/api/types'
 import {supabaseQuery} from '@/api/utils'
 import {AnyObject, SetState} from '@/utils/types'
