@@ -1,7 +1,7 @@
 create or replace function "request_transfer"(
   "title" text,
   "receipt_id" uuid,
-  "transfer_items" json default '{}',
+  "transfer_items" jsonb default '{}',
   "sender" uuid default auth.uid()
 )
   returns void
@@ -10,7 +10,7 @@ create or replace function "request_transfer"(
 as $$
 declare
   "transfer_request_id" uuid;
-  "sender_account_number" int;
+  "sender_account_number" text;
   "user_id" uuid;
   "item_data" jsonb;
 begin
@@ -26,7 +26,7 @@ begin
         "recipient_user",
         "title",
         "receipt_id"
-      ) select (
+      ) values (
         "sender_account_number",
         "user_id",
         "title",
@@ -36,15 +36,15 @@ begin
       -- loop through the item data for each user
       for i in 0..jsonb_array_length(item_data) - 1
       loop
-          insert into "transfer_requests"(
+          insert into "transfer_request_receipt_items"(
             "transfer_request_id",
             "name",
             "settlement_type",
             "amount"
-          ) select (
+          ) values (
             "transfer_request_id",
             item_data->i->>'name',
-            item_data->i->>'settlement_type'::transfer_request_item_settlement_type,
+            (item_data->i->>'settlement_type')::transfer_request_item_settlement_type,
             (item_data->i->>'amount')::integer
           );
       end loop;

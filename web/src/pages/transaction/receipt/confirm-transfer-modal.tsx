@@ -26,6 +26,7 @@ import {useAppDispatch, useAppSelector} from '@/store'
 import {formatMoney} from '@/utils/string'
 
 import {
+  resetTransferState,
   selectConfirmTransferOpen,
   selectReceipt,
   selectTransferItems,
@@ -50,17 +51,16 @@ const ConfirmTransferModal = () => {
     React.useCallback(async () => {
       if (!receipt?.id || !user?.account_number || !title) return
 
-      console.log('transferItems: ', transferItems)
-      console.log('groupItemsByRecipients: ', groupItemsByRecipients(transferItems))
-
       const {error} = await supabase.rpc('request_transfer', {
         receipt_id: receipt?.id,
         title,
-        sender: user?.account_number,
+        sender: user?.id ?? undefined,
         transfer_items: groupItemsByRecipients(transferItems),
       })
       if (error) throw error
-    }, [transferItems, receipt, user, title]),
+
+      dispatch(resetTransferState())
+    }, [transferItems, receipt, user, title, dispatch]),
     {
       onErrorToast: 'Failed to send transfer request',
       onSuccessToast: 'Successfully sent transfer request!',

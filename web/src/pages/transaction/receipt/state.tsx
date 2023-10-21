@@ -44,6 +44,13 @@ export const receiptSlice = createSlice({
     resetReceiptState: () => {
       return initialState
     },
+    resetTransferState: (state) => {
+      state.splitting = false
+      state.activeItem = null
+      state.transferItems = {}
+      state.confirmRequestOpen = false
+      state.transferTitle = ''
+    },
     toggleSplitting: (state) => {
       const v = !state.splitting
       state.splitting = v
@@ -91,6 +98,7 @@ export const {
   setTransferItems,
   setConfirmRequestOpen,
   setTransferTitle,
+  resetTransferState,
 } = receiptSlice.actions
 
 export const selectReceipt = (state: RootState) => state.receipt.receipt
