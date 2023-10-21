@@ -19,6 +19,8 @@ import {
   Text,
 } from '@chakra-ui/react'
 
+import {supabase} from '@/api'
+import {selectProfile} from '@/auth/state'
 import useLoadingState from '@/common/hooks/use-loading-state'
 import {useAppDispatch, useAppSelector} from '@/store'
 import {formatMoney} from '@/utils/string'
@@ -39,15 +41,30 @@ const ConfirmTransferModal = () => {
   const confirmRequestOpen = useAppSelector(selectConfirmTransferOpen)
   const receipt = useAppSelector(selectReceipt)
   const transferItems = useAppSelector(selectTransferItems)
+  const user = useAppSelector(selectProfile)
   const title = useAppSelector(selectTransferTitle)
 
   const handleClose = React.useCallback(() => dispatch(setConfirmRequestOpen(false)), [dispatch])
 
   const [onSubmit, loading] = useLoadingState(
     React.useCallback(async () => {
+      if (!receipt?.id || !user?.account_number || !title) return
+
       console.log('transferItems: ', transferItems)
       console.log('groupItemsByRecipients: ', groupItemsByRecipients(transferItems))
-    }, [transferItems])
+
+      const {error} = await supabase.rpc('request_transfer', {
+        receipt_id: receipt?.id,
+        title,
+        sender: user?.account_number,
+        transfer_items: groupItemsByRecipients(transferItems),
+      })
+      if (error) throw error
+    }, [transferItems, receipt, user, title]),
+    {
+      onErrorToast: 'Failed to send transfer request',
+      onSuccessToast: 'Successfully sent transfer request!',
+    }
   )
 
   const total = React.useMemo(
