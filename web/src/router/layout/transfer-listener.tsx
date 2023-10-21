@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 
 import {Center, Flex, ScaleFade, Text} from '@chakra-ui/react'
+import {BiDollar} from 'react-icons/bi'
 
 import {supabase} from '@/api'
 import {selectProfile} from '@/auth/state'
@@ -57,28 +58,32 @@ const TransferListener = () => {
   }, [user])
 
   return (
-    <Center position="absolute" top={8} w="270px" left="calc(50% - 135px)">
+    <Center position="absolute" top={8} w="300px" left="calc(50% - 150px)">
       <ScaleFade in={isOpen}>
         <Flex
+          position={'relative'}
           justify={'center'}
-          color="#dddddd"
-          w="270px"
-          bg="blue.400"
+          w="300px"
+          bg="white"
           zIndex="overlay"
-          rounded="md"
+          rounded="xl"
           py={2}
           px={5}
           boxShadow={'dark-lg'}
           transition="opacity 1s"
         >
-          <Text fontSize="sm">
-            {additionalData.sender && (
-              <>
+          {additionalData.sender && (
+            <Flex gap={2} fontSize={'5xl'} align={'center'}>
+              <BiDollar />
+              <Text fontSize="sm" color={'gray.500'}>
+                <Text fontSize={'md'} color={'red'} fontWeight={'bold'}>
+                  Transfer request.
+                </Text>
                 <strong>{additionalData.sender.full_name?.split(' ')[0]}</strong> sent you a request for{' '}
                 <strong style={{whiteSpace: 'nowrap'}}>{additionalData.total / 100} PLN.</strong>
-              </>
-            )}
-          </Text>
+              </Text>
+            </Flex>
+          )}
         </Flex>
       </ScaleFade>
     </Center>
