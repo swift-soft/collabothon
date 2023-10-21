@@ -9,3 +9,5 @@ export type TransferItem = {
 
 // map item names to transfer request items
 export type TransferItems = Record<string, Omit<TransferItem, 'name'>[]>
+
+export type TransferRequestRecipients = Record<string, Omit<TransferItem, 'user'>[]>

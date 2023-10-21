@@ -6,7 +6,7 @@ import transfer from '@/pages/home/images/transfer.png'
 
 const Links = () => {
   return (
-    <Box display="flex" flexDirection="row" justifyContent="center" marginTop="15px" mb="20px">
+    <Box display="flex" flexDirection="row" justifyContent="center" marginTop="15px" mb="20px" gap={6}>
       <Link href="#" display="flex" flexDirection="column" alignItems="center" marginX="10px">
         <Image src={transfer} alt="logo" height={'40px'} />
         <Text fontSize="sm" textAlign="center">

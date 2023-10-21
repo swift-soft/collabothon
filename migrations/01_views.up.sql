@@ -83,34 +83,6 @@ where
   (da."destination_account_details"->'user'->>'id')::uuid = auth.uid()
   or (sa."source_account_details"->'user'->>'id')::uuid = auth.uid();
 
-create or replace function "get_user_stats"("from" timestamptz, "to" timestamptz)
-  returns table (
-    "category" text,
-    "total" numeric,
-    "products" jsonb[]
-  )
-  language sql
-as $$
-  select
-    ri."category",
-    sum(ri."price" * ri."amount") as "total",
-    array_agg(jsonb_build_object(
-      'name', ri."name",
-      'price', ri."price",
-      'amount', ri."amount"::int,
-      'date', t."created_at"
-    )) as "products"
-  from "receipt_items" ri
-  inner join "receipts" r on r."id" = ri."receipt_id"
-  inner join "transactions" t on t."id" =  r."transaction_id"
-  inner join "accounts" a on a."number" = t."source_account"
-  inner join "users" u on u."id" = a."user_id"
-  where 
-    t."created_at" between "from" and "to"
-    and u."id" = auth.uid()
-  group by ri."category"
-$$;
-
 create view "user_transactions" as
 select
   t.*
@@ -152,3 +124,43 @@ inner join (
     or "user_two" = auth.uid()
   ) c
 ) c on c."contact" = u."id";
+
+create view "transfer_request_details" as
+select
+  tr.*,
+  jsonb_build_object(
+    'id', u."id",
+    'email', u."email",
+    'full_name', u."full_name",
+    'phone_number', u."phone_number"
+  ) as "sender",
+  i."total",
+  i."items"
+from "transfer_requests" tr
+left join "accounts" a on a."number" = tr."sender_account"
+left join "users" u on u."id" = a."user_id"
+left join lateral (
+  select
+    sum(
+      case 
+        when trri."settlement_type" = 'money' then trri."amount"
+        when trri."settlement_type" = 'no_of_items' then trri."amount" * ri."price"
+        else ((trri."amount"::float / 10000)::float * ri."price"::float * ri."amount"::float)::int 
+      end
+    ) as "total",
+    jsonb_agg(jsonb_build_object(
+      'name', trri."name",
+      'amount', trri."amount",
+      'settlement_type', trri."settlement_type",
+      'amount_money', case 
+        when trri."settlement_type" = 'money' then trri."amount"
+        when trri."settlement_type" = 'no_of_items' then trri."amount" * ri."price"
+        else ((trri."amount"::float / 10000)::float * ri."price"::float * ri."amount"::float)::int 
+      end
+    )) as "items"
+  from "transfer_request_receipt_items" trri
+  left join "receipt_items" ri 
+    on ri."name" = trri."name"
+    and ri."receipt_id" = tr."receipt_id"
+  where trri."transfer_request_id" = tr."id"
+) i on true;

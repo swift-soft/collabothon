@@ -161,11 +161,9 @@ const TransferItemForm = ({item, index, onChange}: Props) => {
           isLazy
         >
           <TabList w="100%">
-            {(receiptItem?.amount || 0) > 1 && (
-              <Tab flex={1} p={4}>
-                <Icon as={FaHashtag} boxSize={5} />
-              </Tab>
-            )}
+            <Tab flex={1} p={4}>
+              <Icon as={FaHashtag} boxSize={5} />
+            </Tab>
             <Tab flex={1} p={4}>
               <Icon as={FaPercent} boxSize={5} />
             </Tab>
@@ -175,27 +173,25 @@ const TransferItemForm = ({item, index, onChange}: Props) => {
           </TabList>
           <TabIndicator mt="-1.5px" height="2px" bg="red.500" borderRadius="1px" />
           <TabPanels>
-            {(receiptItem?.amount || 0) > 1 && (
-              <TabPanel>
-                <Text>Select number of items</Text>
-                <NumberInput
-                  w="100%"
-                  min={0}
-                  max={item.amount}
-                  precision={0}
-                  onChange={(_, v) =>
-                    onChange(index, {
-                      ...item,
-                      settlement_type: 'no_of_items',
-                      amount: v > (receiptItem?.amount || 1) ? receiptItem?.amount : v,
-                    })
-                  }
-                  value={item.amount}
-                >
-                  <NumberInputField borderRightRadius={0} />
-                </NumberInput>
-              </TabPanel>
-            )}
+            <TabPanel>
+              <Text>Select number of items</Text>
+              <NumberInput
+                w="100%"
+                min={0}
+                max={item.amount}
+                precision={0}
+                onChange={(_, v) =>
+                  onChange(index, {
+                    ...item,
+                    settlement_type: 'no_of_items',
+                    amount: v > (receiptItem?.amount || 1) ? receiptItem?.amount : v,
+                  })
+                }
+                value={item.amount || ''}
+              >
+                <NumberInputField borderRightRadius={0} />
+              </NumberInput>
+            </TabPanel>
             <TabPanel>
               <Text>Select percentage of price</Text>
               <FixedTwoNumberInput

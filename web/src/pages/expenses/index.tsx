@@ -1,47 +1,37 @@
-import {useState} from 'react'
+import React from 'react'
 
-import {CalendarIcon} from '@chakra-ui/icons'
-import {Box, Button, Flex, List, ListIcon, ListItem, Text} from '@chakra-ui/react'
-import {format} from 'date-fns'
+import {Box, Button, Flex, Grid, GridItem, HStack, Stack, Text} from '@chakra-ui/react'
 import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
-import {dateFormat, dayDateFormat, monthDateFormat, yearDateFormat} from '@/utils/string'
+import {formatMoney} from '@/utils/string'
 
-const data = [
-  {name: 'Group A', value: 400},
-  {name: 'Group B', value: 300},
-  {name: 'Group C', value: 300},
-  {name: 'Group D', value: 200},
-]
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
-
-type DateRange = 'day' | 'week' | 'month' | 'year'
+import {useStatsState} from './hooks'
+import {DateRange} from './types'
+import {foramtTimeRange} from './utils'
 
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
-const dateFormats: {[key in DateRange]: string} = {
-  day: dayDateFormat,
-  week: dateFormat,
-  month: monthDateFormat,
-  year: yearDateFormat,
-}
-
 const ExpensesPage = () => {
-  const [active, setActive] = useState<DateRange>('day')
+  const {statistics, range, activeTab, setActiveTab} = useStatsState()
 
-  const formatDate = (value: Date | string | null) =>
-    value ? format(new Date(value), dateFormats[active]) : ''
+  const filteredStats = React.useMemo(
+    () => statistics.filter((s) => !!s.total).sort((a, b) => b.total - a.total),
+    [statistics]
+  )
+
+  const total = React.useMemo(() => filteredStats.reduce((sum, s) => sum + s.total, 0), [filteredStats])
+
+  const chartData = filteredStats.length > 0 ? filteredStats : [{name: '', total: 1}]
 
   return (
-    <Box position="relative" width={'100%'} height={'100%'} p={0}>
+    <Stack>
       <Flex>
         {buttons.map((b) => (
           <Button
             key={b}
-            onClick={() => setActive(b)}
-            color={active === b ? 'red' : 'black'}
-            borderBottom={active === b ? '2px solid red' : '2px solid transparent'}
+            onClick={() => setActiveTab(b)}
+            color={activeTab === b ? 'red' : 'black'}
+            borderBottom={activeTab === b ? '2px solid red' : '2px solid transparent'}
             bg="transparent"
             boxShadow="none"
             _hover={{bg: 'white'}}
@@ -53,51 +43,62 @@ const ExpensesPage = () => {
           </Button>
         ))}
       </Flex>
-      <Text
-        textAlign="center"
-        mt="10px"
-        fontSize="22px"
-        style={{textDecoration: 'underline'}}
-        align="center"
-        mb="20px"
-      >
-        {formatDate(new Date())}
+      <Text textAlign="center" fontSize="22px" align="center" my={2}>
+        {!!range && foramtTimeRange(range, activeTab)}
       </Text>
-      <ResponsiveContainer>
-        <PieChart width={280} height={280}>
-          <Pie
-            data={data}
-            cy={100}
-            innerRadius={80}
-            outerRadius={105}
-            fill="#8884d8"
-            paddingAngle={2}
-            dataKey="value"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-            <Label
-              value="2500$"
-              position="center"
-              fill="grey"
-              style={{
-                fontSize: '30px',
-                fontWeight: 'bold',
-                fontFamily: 'Roboto',
-              }}
-            />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+      <Box mb={4}>
+        <ResponsiveContainer height={240}>
+          <PieChart width={240}>
+            <Pie
+              data={chartData}
+              innerRadius={90}
+              outerRadius={120}
+              fill="#8884d8"
+              paddingAngle={2}
+              nameKey="category"
+              dataKey="total"
+            >
+              {chartData.map((entry) => (
+                <Cell key={entry.category} fill={entry.color || '#c0c0c0'} />
+              ))}
+              <Label
+                value={chartData.length === 1 ? '0 $' : formatMoney(total) + '$'}
+                position="center"
+                fill="grey"
+                style={{
+                  fontSize: '30px',
+                  fontWeight: 'bold',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </Box>
 
-      <List color="white" fontSize="1.2em" spacing={4} p="20px">
-        <ListItem>
-          <ListIcon as={CalendarIcon} color="white"></ListIcon>
-          <Text>DashBoard</Text>
-        </ListItem>
-      </List>
-    </Box>
+      <Stack>
+        {filteredStats.map((s) => (
+          <Grid gridTemplateColumns="repeat(6, 1fr)" p={4} boxShadow="3d" rounded="xl" columnGap={2}>
+            <GridItem colSpan={3}>
+              <HStack>
+                <Box boxSize={4} rounded="full" bg={s.color} />
+                <Text>{s.category}</Text>
+              </HStack>
+            </GridItem>
+            <GridItem colSpan={1}>
+              <Flex align="center" h="100%" w="100%" justify="end">
+                <Text>{((s.total / total) * 100).toFixed(0)}%</Text>
+              </Flex>
+            </GridItem>
+            <GridItem colSpan={2}>
+              <Flex align="center" h="100%" w="100%" justify="end">
+                <Text>{formatMoney(s.total)}</Text>
+              </Flex>
+            </GridItem>
+          </Grid>
+        ))}
+      </Stack>
+    </Stack>
   )
 }
 

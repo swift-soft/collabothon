@@ -1,11 +1,11 @@
 import {ReceiptItem} from '@/api/models'
 import {SettlementType} from '@/api/types'
 
-import {TransferItem} from './types'
+import {TransferItem, TransferItems, TransferRequestRecipients} from './types'
 
 export const settlementTypeToSymbol: Record<SettlementType, string> = {
-  money: '$',
-  no_of_items: 'szt.',
+  money: '',
+  no_of_items: ' pcs',
   percentage: '%',
 }
 
@@ -25,4 +25,31 @@ export const getTransferAmount = (
   }
 
   return 0
+}
+
+export const groupItemsByRecipients = (inputData: TransferItems): TransferRequestRecipients => {
+  const outputData: TransferRequestRecipients = {}
+
+  for (const itemName in inputData) {
+    const items = inputData[itemName]
+
+    for (const item of items) {
+      const userId = item.user?.id
+      if (!userId) continue
+
+      const {amount, settlement_type} = item
+
+      if (!outputData[userId]) {
+        outputData[userId] = []
+      }
+
+      outputData[userId].push({
+        name: itemName,
+        settlement_type,
+        amount,
+      })
+    }
+  }
+
+  return outputData
 }
