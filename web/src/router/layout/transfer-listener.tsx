@@ -126,7 +126,7 @@ const TransferListener = () => {
               621 151 137
             </Text>
           </DrawerHeader>
-          <DrawerBody minH="40vh">
+          <DrawerBody minH="40vh" maxH="50vh">
             <Box paddingBottom="4" textAlign="center">
               <Text>Sum</Text>
               <Text color="green.400" fontSize="2xl">
