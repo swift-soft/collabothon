@@ -1,19 +1,13 @@
-import { useState } from 'react';
+import {useState} from 'react'
 
+import {CalendarIcon} from '@chakra-ui/icons'
+import {Box, Button, Flex, List, ListIcon, ListItem, Text} from '@chakra-ui/react'
+import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
+import {formatDayStats, formatMonthStats, formatWeekStats, formatYearStats} from '@/utils/string'
 
-import { CalendarIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
-import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
-
-
-
-import { formatDayStats, formatMonthStats, formatWeekStats, formatYearStats } from '@/utils/string';
-
-
-
-import { getUserStats } from './hooks';
-
+import {useStatsState} from './hooks'
+import {DateRange} from './types'
 
 const statistics = [
   {name: 'Home and Garden', value: 400},
@@ -43,7 +37,7 @@ const COLORS = [
   '#FF8042',
   '#C75E00',
   '#8400C5',
-  '#0099FF',  
+  '#0099FF',
   '#99FF00',
   '#FF66B2',
   '#B2FF66',
@@ -59,22 +53,10 @@ const COLORS = [
   '#FFCC33',
 ]
 
-type DateRange = 'day' | 'week' | 'month' | 'year'
-
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
-const dateStats: {[key in DateRange]: (value: Date | string | null) => string} = {
-  day: formatDayStats,
-  week: formatWeekStats,
-  month: formatMonthStats,
-  year: formatYearStats,
-}
-
 const ExpensesPage = () => {
-  const [active, setActive] = useState<DateRange>('day')
-  // const {statistics} = getUserStats()
-
-  const formattedDate = dateStats[active](new Date());
+  const {statistics, range, activeTab, setActiveTab} = useStatsState()
 
   return (
     <Box position="relative" width={'100%'} height={'100%'} p={0}>
@@ -82,9 +64,9 @@ const ExpensesPage = () => {
         {buttons.map((b) => (
           <Button
             key={b}
-            onClick={() => setActive(b)}
-            color={active === b ? 'red' : 'black'}
-            borderBottom={active === b ? '2px solid red' : '2px solid transparent'}
+            onClick={() => setActiveTab(b)}
+            color={activeTab === b ? 'red' : 'black'}
+            borderBottom={activeTab === b ? '2px solid red' : '2px solid transparent'}
             bg="transparent"
             boxShadow="none"
             _hover={{bg: 'white'}}
@@ -96,13 +78,7 @@ const ExpensesPage = () => {
           </Button>
         ))}
       </Flex>
-      <Text
-        textAlign="center"
-        mt="10px"
-        fontSize="22px"
-        align="center"
-        mb="20px"
-      >
+      <Text textAlign="center" mt="10px" fontSize="22px" align="center" mb="20px">
         {formattedDate}
       </Text>
       <ResponsiveContainer height={280}>
