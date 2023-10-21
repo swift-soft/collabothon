@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage'
 
 import {supabase} from '@/api'
 import authReducer, {updateUser} from '@/auth/state'
+import receiptReducer from '@/pages/transaction/receipt/state'
 import {toast} from '@/theme'
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     },
     authReducer
   ),
+  receipt: receiptReducer,
 })
 
 export const store = configureStore({

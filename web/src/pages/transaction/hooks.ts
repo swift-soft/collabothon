@@ -30,7 +30,6 @@ export const useTransactionDetails = () => {
         } else {
           setTransaction(data[0])
           setIsSender(data[0].source_account === user?.account_number)
-          console.log(data[0])
         }
       } catch (err) {
         console.error((err as Error)?.message)
