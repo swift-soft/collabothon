@@ -33,7 +33,7 @@ const theme = extendTheme({
   },
   fonts: {
     heading: `'Open Sans', sans-serif`,
-    body: `'Roboto', sans-serif`,
+    body: `'Poppins', sans-serif`,
   },
 })
 
