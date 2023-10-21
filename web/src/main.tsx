@@ -10,6 +10,7 @@ import {BrowserRouter} from 'react-router-dom'
 
 import Router from './router'
 import {store} from './store'
+import './styles.css'
 import theme, {ToastContainer} from './theme'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

@@ -9,7 +9,7 @@ import useGetQuery from '@/common/hooks/use-get-query'
 import {SelectOption} from '@/utils/types'
 
 type Props = Omit<AsyncProps<SelectOption, false, GroupBase<SelectOption>>, 'value' | 'onChange'> & {
-  value?: string
+  value?: string | null
   onChange: (v: SelectOption | null) => void
 }
 
@@ -22,7 +22,7 @@ const ContactSelect = ({value, onChange, ...rest}: Props) => {
       () => ({
         from: 'user_unique_contacts',
         autoRefetch: false,
-        match: {id: value},
+        match: {id: value ?? undefined},
       }),
       [value]
     )

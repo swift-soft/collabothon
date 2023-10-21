@@ -1,8 +1,10 @@
 import {SettlementType} from '@/api/types'
 
+export type TransferItemUser = {id?: string; name?: string}
+
 export type TransferItem = {
   name: string
-  user?: {id?: string; name?: string}
+  user?: TransferItemUser
   settlement_type?: SettlementType
   amount?: number
 }

@@ -124,3 +124,43 @@ inner join (
     or "user_two" = auth.uid()
   ) c
 ) c on c."contact" = u."id";
+
+create view "transfer_request_details" as
+select
+  tr.*,
+  jsonb_build_object(
+    'id', u."id",
+    'email', u."email",
+    'full_name', u."full_name",
+    'phone_number', u."phone_number"
+  ) as "sender",
+  i."total",
+  i."items"
+from "transfer_requests" tr
+left join "accounts" a on a."number" = tr."sender_account"
+left join "users" u on u."id" = a."user_id"
+left join lateral (
+  select
+    sum(
+      case 
+        when trri."settlement_type" = 'money' then trri."amount"
+        when trri."settlement_type" = 'no_of_items' then trri."amount" * ri."price"
+        else ((trri."amount"::float / 10000)::float * ri."price"::float * ri."amount"::float)::int 
+      end
+    ) as "total",
+    jsonb_agg(jsonb_build_object(
+      'name', trri."name",
+      'amount', trri."amount",
+      'settlement_type', trri."settlement_type",
+      'amount_money', case 
+        when trri."settlement_type" = 'money' then trri."amount"
+        when trri."settlement_type" = 'no_of_items' then trri."amount" * ri."price"
+        else ((trri."amount"::float / 10000)::float * ri."price"::float * ri."amount"::float)::int 
+      end
+    )) as "items"
+  from "transfer_request_receipt_items" trri
+  left join "receipt_items" ri 
+    on ri."name" = trri."name"
+    and ri."receipt_id" = tr."receipt_id"
+  where trri."transfer_request_id" = tr."id"
+) i on true;

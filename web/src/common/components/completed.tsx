@@ -27,7 +27,7 @@ const Completed = () => {
       <Button onClick={onToggle}>Click Me</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent m="auto" bgColor= "#00A550" h="100vh">
+        <ModalContent m="auto" bgColor="#00A550" h="100vh">
           <ModalBody m="auto">
             <Box textAlign="center">
               <CheckCircleIcon
