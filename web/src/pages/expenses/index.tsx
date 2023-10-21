@@ -4,15 +4,18 @@ import { useState } from 'react';
 
 import { CalendarIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
-import { format } from 'date-fns';
 import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 
 
-import { dayDateFormat, monthDateFormat, weekDateFormat, yearDateFormat } from '@/utils/string';
+import { formatDayStats, formatMonthStats, formatWeekStats, formatYearStats } from '@/utils/string';
 
 
-const data = [
+
+import { getUserStats } from './hooks';
+
+
+const statistics = [
   {name: 'Home and Garden', value: 400},
   {name: 'Education', value: 300},
   {name: 'Electronics and Appliances', value: 300},
@@ -40,7 +43,7 @@ const COLORS = [
   '#FF8042',
   '#C75E00',
   '#8400C5',
-  '#0099FF',
+  '#0099FF',  
   '#99FF00',
   '#FF66B2',
   '#B2FF66',
@@ -60,18 +63,18 @@ type DateRange = 'day' | 'week' | 'month' | 'year'
 
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
-const dateFormats: {[key in DateRange]: string} = {
-  day: dayDateFormat,
-  week: weekDateFormat,
-  month: monthDateFormat,
-  year: yearDateFormat,
+const dateStats: {[key in DateRange]: (value: Date | string | null) => string} = {
+  day: formatDayStats,
+  week: formatWeekStats,
+  month: formatMonthStats,
+  year: formatYearStats,
 }
 
 const ExpensesPage = () => {
   const [active, setActive] = useState<DateRange>('day')
+  // const {statistics} = getUserStats()
 
-  const formatDate = (value: Date | string | null) =>
-    value ? format(new Date(value), dateFormats[active]) : ''
+  const formattedDate = dateStats[active](new Date());
 
   return (
     <Box position="relative" width={'100%'} height={'100%'} p={0}>
@@ -97,16 +100,15 @@ const ExpensesPage = () => {
         textAlign="center"
         mt="10px"
         fontSize="22px"
-        style={{textDecoration: 'underline'}}
         align="center"
         mb="20px"
       >
-        {formatDate(new Date())}
+        {formattedDate}
       </Text>
       <ResponsiveContainer height={280}>
         <PieChart width={280}>
           <Pie
-            data={data}
+            data={statistics}
             cy={100}
             innerRadius={80}
             outerRadius={105}
@@ -114,7 +116,7 @@ const ExpensesPage = () => {
             paddingAngle={2}
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {statistics.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
             <Label
