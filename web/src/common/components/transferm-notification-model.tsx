@@ -77,7 +77,7 @@ const ConfirmAsk = () => {
           <ModalFooter paddingTop="10">
             <VStack m="auto" spacing={3}>
               <Button w="100%" colorScheme="red" borderRadius="40">
-                Confirm a tranferm
+                Confirm transfer
               </Button>
               <HStack spacing={24} m="auto">
                 <Button w="100px" variant="ghost" color="red" onClick={onClose}>
