@@ -15,4 +15,8 @@ export const polishTimestampFormat = 'dd.MM.yyyy HH:mm'
 export const formatTimestamp = (value: Date | string | null) =>
   value ? format(new Date(value), polishTimestampFormat) : ''
 
+export const dateWithMonethName = 'dd MMMM'
+export const formatDateName = (value: Date | string | null) =>
+  value ? format(new Date(value), dateWithMonethName) : ''
+
 export const formatMoney = (v?: number | null) => ((v || 0) / 100).toFixed(2)
