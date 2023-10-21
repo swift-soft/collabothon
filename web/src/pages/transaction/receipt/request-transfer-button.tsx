@@ -10,7 +10,7 @@ const RequestTransferButton = () => {
   const splitting = useAppSelector(selectSplitting)
 
   return !splitting ? null : (
-    <Button colorScheme="red" onClick={() => dispatch(setConfirmRequestOpen(true))}>
+    <Button  colorScheme="red" onClick={() => dispatch(setConfirmRequestOpen(true))}>
       Request Transfer
     </Button>
   )

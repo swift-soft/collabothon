@@ -1,5 +1,4 @@
 import {Box, Stack} from '@chakra-ui/react'
-import {askConfirmation} from '@common/components/transferm-notification-model'
 import {Outlet} from 'react-router'
 
 import {HEADER_HEIGHT, NAVBAR_HEIGHT} from '@/constants'
@@ -7,7 +6,6 @@ import {HEADER_HEIGHT, NAVBAR_HEIGHT} from '@/constants'
 import Header from './header'
 import Navbar from './navbar'
 import TransferListener from './transfer-listener'
-
 
 const Layout = () => {
   return (
@@ -23,10 +21,8 @@ const Layout = () => {
         <Outlet />
       </Box>
       <Navbar />
-        
     </Stack>
   )
 }
-
 
 export default Layout
