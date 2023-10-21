@@ -1,5 +1,4 @@
-import {ReceiptItem} from '@/api/models'
-import {SettlementType} from '@/api/types'
+import {ReceiptItem, SettlementType} from '@/api/models'
 
 import {TransferItemNoName, TransferItems, TransferRequestRecipients} from './types'
 
@@ -43,7 +42,7 @@ export const groupItemsByRecipients = (inputData: TransferItems): TransferReques
       outputData[userId].push({
         name: itemName,
         settlement_type,
-        amount,
+        amount: amount ? Math.round(amount) : 0,
       })
     }
   }

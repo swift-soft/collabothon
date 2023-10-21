@@ -49,9 +49,18 @@ export type Stats = Stat[]
 
 export type TransferRequest = Database['public']['Tables']['transfer_requests']['Row']
 
+export type SettlementType = Database['public']['Enums']['transfer_request_item_settlement_type']
+
+export type TransferRequestDetailsItem = {
+  name: string
+  amount: number
+  settlement_type: SettlementType
+  amount_money: number
+}
+
 export type TransferRequestDetails = Omit<
   Database['public']['Views']['transfer_request_details']['Row'],
-  'sender'
+  'sender' | 'items'
 > & {
   sender: {
     id: string
@@ -59,6 +68,7 @@ export type TransferRequestDetails = Omit<
     full_name: string | null
     phone_number: string | null
   }
+  items: TransferRequestDetailsItem[]
 }
 
 export type TransferRequestState = Database['public']['Enums']['transfer_state']

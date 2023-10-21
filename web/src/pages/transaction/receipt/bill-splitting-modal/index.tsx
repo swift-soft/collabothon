@@ -29,7 +29,7 @@ import {
 } from '@chakra-ui/react'
 import {FaDollarSign, FaHashtag, FaPercent} from 'react-icons/fa'
 
-import {SettlementType} from '@/api/types'
+import {SettlementType} from '@/api/models'
 import FixedTwoNumberInput from '@/common/components/fixed-two-number-input'
 import {useAppDispatch, useAppSelector} from '@/store'
 import {formatMoney} from '@/utils/string'
@@ -120,7 +120,7 @@ const BillSplittingModal = () => {
               <Button onClick={onClose} variant="outline" flex={1} colorScheme="red">
                 Cancel
               </Button>
-              <Button onClick={onSave} flex={1} colorScheme="red">
+              <Button onClick={onSave} flex={1} colorScheme="red" isDisabled={amountLeft < 0}>
                 Save
               </Button>
             </Flex>

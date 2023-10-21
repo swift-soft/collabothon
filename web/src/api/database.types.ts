@@ -198,27 +198,27 @@ export interface Database {
           accounted_at: string | null
           amount: number
           created_at: string
-          destination_account: string | null
+          destination_account: string
           id: string
-          source_account: string | null
+          source_account: string
           title: string
         }
         Insert: {
           accounted_at?: string | null
           amount?: number
           created_at?: string
-          destination_account?: string | null
+          destination_account: string
           id?: string
-          source_account?: string | null
+          source_account: string
           title: string
         }
         Update: {
           accounted_at?: string | null
           amount?: number
           created_at?: string
-          destination_account?: string | null
+          destination_account?: string
           id?: string
-          source_account?: string | null
+          source_account?: string
           title?: string
         }
         Relationships: [
@@ -769,6 +769,13 @@ export interface Database {
           total: number
           products: Json[]
         }[]
+      }
+      get_user_total_expenses: {
+        Args: {
+          from: string
+          to: string
+        }
+        Returns: number
       }
       request_transfer: {
         Args: {

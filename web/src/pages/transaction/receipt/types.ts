@@ -1,4 +1,4 @@
-import {SettlementType} from '@/api/types'
+import {SettlementType} from '@/api/models'
 
 export type TransferItemUser = {id?: string; name?: string}
 

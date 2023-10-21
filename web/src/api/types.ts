@@ -28,5 +28,3 @@ export type UpsertResponse = {
 }
 
 export type QueryResult<T extends AnyObject> = Pick<PostgrestResponse<T>, 'data' | 'count'>
-
-export type SettlementType = Database['public']['Enums']['transfer_request_item_settlement_type']

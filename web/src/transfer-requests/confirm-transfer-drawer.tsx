@@ -11,15 +11,20 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  Grid,
+  GridItem,
   HStack,
   Heading,
+  Stack,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
 import {supabase} from '@/api'
+import {TransferRequestDetailsItem} from '@/api/models'
 import {fetchUser, selectProfile} from '@/auth/state'
 import useLoadingState from '@/common/hooks/use-loading-state'
+import {settlementTypeToSymbol} from '@/pages/transaction/receipt/utils'
 import {useAppDispatch, useAppSelector} from '@/store'
 import {formatDateLong, formatMoney} from '@/utils/string'
 
@@ -59,7 +64,6 @@ const ConfirmTransferDrawer = () => {
     }, [transferRequest, dispatch]),
     {
       onErrorToast: 'Failed to reject transfer request.',
-      onSuccessToast: 'Rejected transfer request',
     }
   )
 
@@ -75,7 +79,7 @@ const ConfirmTransferDrawer = () => {
     }, [transferRequest, dispatch]),
     {
       onErrorToast: 'Failed to process transaction.',
-      onSuccessToast: 'Accepted transfer request',
+      onSuccessToast: 'Accepted transfer request.',
     }
   )
 
@@ -132,6 +136,19 @@ const ConfirmTransferDrawer = () => {
               <ChevronDownIcon color="red" />
             </Flex>
           </Box>
+
+          <Box padding="2">
+            <Text paddingBottom="2" fontSize="sm">
+              Receipt items
+            </Text>
+            <Stack>
+              {transferRequest?.items.map((item) => <ReceiptItem key={item.name} item={item} />)}
+              <HStack fontWeight="bold" justify="space-between">
+                <Text>Total</Text>
+                <Text>{formatMoney(transferRequest?.total)} PLN</Text>
+              </HStack>
+            </Stack>
+          </Box>
         </DrawerBody>
 
         <DrawerFooter paddingTop="10">
@@ -165,6 +182,29 @@ const ConfirmTransferDrawer = () => {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  )
+}
+
+const ReceiptItem = ({item}: {item: TransferRequestDetailsItem}) => {
+  return (
+    <Grid templateColumns="repeat(6, 1fr)" px={2} py={1}>
+      <GridItem colSpan={3}>
+        <HStack align="center">
+          <Text>{item.name}</Text>
+        </HStack>
+      </GridItem>
+      <GridItem colSpan={2}>
+        <Flex align="center" h="full">
+          {item.settlement_type === 'no_of_items' ? item.amount : formatMoney(item.amount)}
+          {!!item.settlement_type && settlementTypeToSymbol[item.settlement_type]}
+        </Flex>
+      </GridItem>
+      <GridItem colSpan={1} textAlign="end">
+        <Flex align="center" h="full">
+          {formatMoney(item.amount_money)}
+        </Flex>
+      </GridItem>
+    </Grid>
   )
 }
 

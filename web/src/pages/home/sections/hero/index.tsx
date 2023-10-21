@@ -1,8 +1,12 @@
+import React from 'react'
+
 import {Box, Flex, Image, Spacer, Stack, Text} from '@chakra-ui/react'
+import {sub} from 'date-fns'
 import {CarouselProvider, Dot, Slide, Slider} from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import {Link} from 'react-router-dom'
 
+import {supabase} from '@/api'
 import {selectProfile} from '@/auth/state'
 import {useAppSelector} from '@/store'
 import {formatDateName, formatMoney} from '@/utils/string'
@@ -12,6 +16,26 @@ import './style.css'
 
 const Hero = () => {
   const user = useAppSelector(selectProfile)
+
+  const [expenses, setExpenses] = React.useState(0)
+  React.useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const {data, error} = await supabase.rpc('get_user_total_expenses', {
+          from: sub(new Date(), {years: 100}).toUTCString(),
+          to: new Date().toUTCString(),
+        })
+        if (error) throw error
+
+        setExpenses(data)
+      } catch (err) {
+        console.error((err as Error)?.message)
+      }
+    }
+
+    fetchStatistics()
+  }, [])
+
   return (
     <Box height="fit-content">
       <CarouselProvider infinite={true} naturalSlideWidth={16} naturalSlideHeight={9} totalSlides={2}>
@@ -40,7 +64,7 @@ const Hero = () => {
                   Expenses up to {formatDateName(new Date())}:
                 </Text>
                 <Text fontWeight="semibold" color="yellow.700">
-                  5678.89 PLN
+                  {formatMoney(expenses)} PLN
                 </Text>
               </Box>
               <Spacer />

@@ -116,3 +116,14 @@ begin
   where tr."id" = accept_transfer_request."id";
 end
 $$;
+
+create or replace function "get_user_total_expenses"("from" timestamptz, "to" timestamptz)
+  returns int
+  language sql
+as $$
+  select coalesce(sum(t."amount"), 0)
+  from "transactions" t
+  left join "accounts" a on a."number" = t."source_account"
+  where a."user_id" = auth.uid()
+  and t."created_at" between "from" and "to";
+$$;
