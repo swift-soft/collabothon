@@ -1,5 +1,6 @@
 import {Navigate, Route, Routes} from 'react-router-dom'
 
+import ConfirmAsk from '@/common/components/transferm-notification-model'
 import AuthPage from '@/pages/auth'
 import ProfilePage from '@/pages/profile'
 import TestsPage from '@/pages/tests'
