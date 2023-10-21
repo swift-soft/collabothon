@@ -5,15 +5,15 @@ import {
   Box,
   Button,
   Center,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   HStack,
   Heading,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   ScaleFade,
   Text,
   VStack,
@@ -112,10 +112,10 @@ const TransferListener = () => {
         </Flex>
       </ScaleFade>
 
-      <Modal isOpen={isOpenConfirmation} onClose={handleClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader textAlign="center" textTransform="uppercase" padding="2">
+      <Drawer placement="bottom" isOpen={isOpenConfirmation} onClose={handleClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader textAlign="center" textTransform="uppercase" padding="2">
             <Box textTransform="uppercase" color="red" textAlign="center" fontSize="lg" borderRadius="40">
               Request details
             </Box>
@@ -125,8 +125,8 @@ const TransferListener = () => {
             <Text textDecoration="none" fontSize="sm" paddingTop="2">
               621 151 137
             </Text>
-          </ModalHeader>
-          <ModalBody minH="40vh" maxH="50vh">
+          </DrawerHeader>
+          <DrawerBody minH="40vh" maxH="50vh">
             <Box paddingBottom="4" textAlign="center">
               <Text>Sum</Text>
               <Text color="green.400" fontSize="2xl">
@@ -161,9 +161,9 @@ const TransferListener = () => {
                 <ChevronDownIcon color="red"></ChevronDownIcon>
               </Flex>
             </Box>
-          </ModalBody>
+          </DrawerBody>
 
-          <ModalFooter paddingTop="10">
+          <DrawerFooter paddingTop="10">
             <VStack m="auto" spacing={3}>
               <Button w="100%" colorScheme="red" borderRadius="40">
                 Confirm transfer
@@ -177,9 +177,9 @@ const TransferListener = () => {
                 </Button>
               </HStack>
             </VStack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Center>
   )
 }

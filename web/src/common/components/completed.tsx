@@ -4,18 +4,14 @@ import {CheckCircleIcon} from '@chakra-ui/icons'
 import {
   Box,
   Button,
-  Flex,
-  HStack,
-  Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Text,
-  VStack,
   useDisclosure,
 } from '@chakra-ui/react'
 
@@ -25,10 +21,10 @@ const Completed = () => {
   return (
     <>
       <Button onClick={onToggle}>Click Me</Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent m="auto" bgColor="#00A550" h="100vh">
-          <ModalBody m="auto">
+      <Drawer isOpen={isOpen} onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent m="auto" bgColor="#00A550" h="100vh">
+          <DrawerBody m="auto">
             <Box textAlign="center">
               <CheckCircleIcon
                 boxSize="20xl"
@@ -42,15 +38,15 @@ const Completed = () => {
             <Text paddingTop="50px" color="white" fontSize="2xl">
               Payment completed
             </Text>
-          </ModalBody>
+          </DrawerBody>
 
-          <ModalFooter m="auto" w="100%" paddingBottom="8">
+          <DrawerFooter m="auto" w="100%" paddingBottom="8">
             <Button w="100%" bgColor="white" color="#00A550" onClick={onClose} borderRadius="40">
               OK
             </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   )
 }
