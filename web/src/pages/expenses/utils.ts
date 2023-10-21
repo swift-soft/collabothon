@@ -11,6 +11,10 @@ export const foramtTimeRange = (range: TimeRange, activeTab: DateRange) => {
       return format(new Date(), 'dd  MMM | eeee')
     case 'week':
       return format(range.from, 'dd.MM') + ' - ' + format(range.to, 'dd.MM')
+    case 'month':
+      return format(range.from, 'MMMM yyyy')
+    case 'year':
+      return format(range.from, 'yyyy')
     default:
       return formatDate(range.from) + ' - ' + formatDate(range.to)
   }

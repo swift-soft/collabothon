@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {Box, Center, Text} from '@chakra-ui/react'
+import {Center, Flex, ScaleFade, Text} from '@chakra-ui/react'
 
 import {supabase} from '@/api'
 import {selectProfile} from '@/auth/state'
@@ -8,9 +8,9 @@ import {useAppSelector} from '@/store'
 
 const TransferListener = () => {
   const user = useAppSelector(selectProfile)
-  const [isNotification, setIsNotification] = useState(false)
   const [transfer, setTransfer] = useState({})
   const [additionalData, setAdditionalData] = useState({})
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const channel = supabase
@@ -25,20 +25,24 @@ const TransferListener = () => {
         },
         async (payload) => {
           try {
-            setIsNotification(true)
-            setTimeout(() => setIsNotification(false), 8000)
+            setIsOpen(true)
+
+            setTimeout(() => {
+              setIsOpen(false)
+            }, 8000)
+
             setTransfer(payload.new)
-            console.log(payload)
 
             const {data, error} = await supabase
-              .from('transfer_view')
-              .select('sender_name, amount')
-              .eq('transfer_id', payload.new.id)
+              .from('transfer_request_details')
+              .select('sender, total')
+              .eq('id', payload.new.id)
 
             if (error) {
               console.error('Error fetching sender:', error)
             } else {
-              setAdditionalData(data[0] || '')
+              console.log(data[0])
+              setAdditionalData(data[0] || {})
             }
           } catch (error) {
             console.error('Error in transfer listener:', error)
@@ -53,17 +57,30 @@ const TransferListener = () => {
   }, [user])
 
   return (
-    <Center position="absolute" top={5} w="200px" left="calc(50% - 100px)">
-      {isNotification && (
-        <Box h="40px" color="white" w="200px" bg="blue.300" zIndex="overlay" rounded="md" p={5}>
-          <Text>
-            {additionalData?.sender_name &&
-              `${additionalData?.sender_name.split(' ')[0]} sent you request for ${
-                additionalData?.amount / 100
-              } PLN`}
+    <Center position="absolute" top={8} w="270px" left="calc(50% - 135px)">
+      <ScaleFade in={isOpen}>
+        <Flex
+          justify={'center'}
+          color="#dddddd"
+          w="270px"
+          bg="blue.400"
+          zIndex="overlay"
+          rounded="md"
+          py={2}
+          px={5}
+          boxShadow={'dark-lg'}
+          transition="opacity 1s"
+        >
+          <Text fontSize="sm">
+            {additionalData.sender && (
+              <>
+                <strong>{additionalData.sender.full_name?.split(' ')[0]}</strong> sent you a request for{' '}
+                <strong style={{whiteSpace: 'nowrap'}}>{additionalData.total / 100} PLN.</strong>
+              </>
+            )}
           </Text>
-        </Box>
-      )}
+        </Flex>
+      </ScaleFade>
     </Center>
   )
 }
