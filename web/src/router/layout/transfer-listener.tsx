@@ -60,6 +60,7 @@ const TransferListener = () => {
     <Center position="absolute" top={8} w="270px" left="calc(50% - 135px)">
       <ScaleFade in={isOpen}>
         <Flex
+          position={'relative'}
           justify={'center'}
           color="#dddddd"
           w="270px"
