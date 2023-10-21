@@ -1,20 +1,60 @@
-import {useState} from 'react'
+import { useState } from 'react';
 
-import {CalendarIcon} from '@chakra-ui/icons'
-import {Box, Button, Flex, List, ListIcon, ListItem, Text} from '@chakra-ui/react'
-import {format} from 'date-fns'
-import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
-import {dateFormat, dayDateFormat, monthDateFormat, yearDateFormat} from '@/utils/string'
+
+import { CalendarIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
+import { format } from 'date-fns';
+import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
+
+
+
+import { dayDateFormat, monthDateFormat, weekDateFormat, yearDateFormat } from '@/utils/string';
+
 
 const data = [
-  {name: 'Group A', value: 400},
-  {name: 'Group B', value: 300},
-  {name: 'Group C', value: 300},
-  {name: 'Group D', value: 200},
+  {name: 'Home and Garden', value: 400},
+  {name: 'Education', value: 300},
+  {name: 'Electronics and Appliances', value: 300},
+  {name: 'Hobby', value: 200},
+  {name: 'Culture', value: 200},
+  {name: 'Automotive', value: 200},
+  {name: 'Travel', value: 200},
+  {name: 'Gifts', value: 200},
+  {name: 'Restaurants', value: 200},
+  {name: 'Family', value: 200},
+  {name: 'Entertainment', value: 200},
+  {name: 'Sports', value: 200},
+  {name: 'Beauty', value: 200},
+  {name: 'Services', value: 200},
+  {name: 'Health', value: 200},
+  {name: 'Animals', value: 200},
+  {name: 'Food', value: 200},
+  {name: 'Other', value: 200},
 ]
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+const COLORS = [
+  '#0088FE',
+  '#00C49F',
+  '#FFBB28',
+  '#FF8042',
+  '#C75E00',
+  '#8400C5',
+  '#0099FF',
+  '#99FF00',
+  '#FF66B2',
+  '#B2FF66',
+  '#336699',
+  '#FF3366',
+  '#66FF33',
+  '#993366',
+  '#CC6600',
+  '#FF99CC',
+  '#669933',
+  '#FF33CC',
+  '#339933',
+  '#FFCC33',
+]
 
 type DateRange = 'day' | 'week' | 'month' | 'year'
 
@@ -22,7 +62,7 @@ const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
 const dateFormats: {[key in DateRange]: string} = {
   day: dayDateFormat,
-  week: dateFormat,
+  week: weekDateFormat,
   month: monthDateFormat,
   year: yearDateFormat,
 }
@@ -63,8 +103,8 @@ const ExpensesPage = () => {
       >
         {formatDate(new Date())}
       </Text>
-      <ResponsiveContainer>
-        <PieChart width={280} height={280}>
+      <ResponsiveContainer height={280}>
+        <PieChart width={280}>
           <Pie
             data={data}
             cy={100}
