@@ -40,3 +40,5 @@ export type ReceiptItem = Database['public']['Tables']['receipt_items']['Row']
 export type ReceiptJoined = Omit<Database['public']['Views']['receipts_joined']['Row'], 'items'> & {
   items: ReceiptItem[]
 }
+
+export type Stats = Database['public']['Functions']['get_user_stats']['Returns']

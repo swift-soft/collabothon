@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
 import React from 'react'
 
-import {add, startOfDay, sub} from 'date-fns'
-import {useParams} from 'react-router-dom'
+import {startOfDay, sub} from 'date-fns'
 
 import {supabase} from '@/api'
+import {Stats} from '@/api/models'
 import {selectProfile} from '@/auth/state'
 import {useAppSelector} from '@/store'
 
@@ -12,9 +12,9 @@ import {DateRange, TimeRange} from './types'
 
 export const useStatsState = () => {
   const user = useAppSelector(selectProfile)
-  const [range, setRange] = React.useState<TimeRange>()
+  const [range, setRange] = React.useState<TimeRange>({from: startOfDay(new Date()), to: new Date()})
 
-  const [activeTab, setActiveTab] = useState<DateRange>('day')
+  const [activeTab, setActiveTab] = useState<DateRange>('week')
   React.useEffect(() => {
     const newRange: TimeRange = {from: new Date(), to: new Date()}
 
@@ -40,38 +40,26 @@ export const useStatsState = () => {
     setRange(newRange)
   }, [activeTab])
 
-  const {id} = useParams()
-  const [statistics, setStatistics] = useState([])
-
+  const [statistics, setStatistics] = useState<Stats>([])
   useEffect(() => {
     const fetchStatistics = async () => {
-      if (!id) return
+      if (!range) return
 
       try {
-        const {data, error} = await supabase
-          .rpc('get_user_stats', {from: new Date(), to: new Date()})
-          .select()
-          .returns<{category: string; total: number; products: any[]}>()
-
-        if (error) {
-          throw new Error(error.message)
-        } else {
-          const userStatistics = data[0]
-          setStatistics(
-            userStatistics.products.map((product) => ({
-              name: product.name,
-              value: product.price * product.amount,
-            }))
-          )
-          setIsSender(userStatistics.source_account === user?.account_number)
-        }
+        const {data, error} = await supabase.rpc('get_user_stats', {
+          from: range?.from.toUTCString(),
+          to: range?.to.toUTCString(),
+        })
+        if (error) throw error
+        console.log(data)
+        setStatistics(data)
       } catch (err) {
         console.error((err as Error)?.message)
       }
     }
 
     fetchStatistics()
-  }, [id, user])
+  }, [range])
 
   return {statistics, user, range, activeTab, setActiveTab}
 }

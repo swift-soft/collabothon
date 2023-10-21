@@ -87,7 +87,8 @@ create table "receipts" (
 create extension if not exists "citext";
 
 create table "categories" (
-  "name" citext primary key
+  "name" citext primary key,
+  "colors" text -- in hex
 );
 
 create table "receipt_items" (
