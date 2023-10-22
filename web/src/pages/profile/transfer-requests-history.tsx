@@ -25,6 +25,8 @@ const TransferRequestsHistory = () => {
     React.useMemo(
       () => ({
         from: 'transfer_request_details',
+        order: 'requested_at',
+        descending: true,
         match: {recipient_user: user?.id},
       }),
       [user]
@@ -37,6 +39,8 @@ const TransferRequestsHistory = () => {
 
   const handleItemClick = React.useCallback(
     (t: TransferRequestDetails) => {
+      if (t.state === 'accepted') return
+
       dispatch(setTransferRequest(t))
       dispatch(setConfirmationOpen(true))
     },

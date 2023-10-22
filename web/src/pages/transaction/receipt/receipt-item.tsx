@@ -8,6 +8,7 @@ import {formatMoney} from '@/utils/string'
 
 import {selectSplitting, selectTransferItems, setActiveItem} from './state'
 import TransferListItem from './transfer-item'
+import {getTransferAmount} from './utils'
 
 type Props = {
   item: ReceiptItem
@@ -23,9 +24,18 @@ const ReceiptListItem = ({item}: Props) => {
     [transferItems, item]
   )
 
-  const style: GridProps = React.useMemo(
+  const amountLeft = React.useMemo(
     () =>
-      !splitting
+      !item
+        ? 0
+        : item.price * item.amount -
+          (transferItem ? transferItem.reduce((sum, c) => sum + getTransferAmount(item, c), 0) : 0),
+    [transferItem, item]
+  )
+
+  const style: GridProps = React.useMemo(
+    () => ({
+      ...(!splitting
         ? {
             py: 1,
           }
@@ -37,15 +47,22 @@ const ReceiptListItem = ({item}: Props) => {
             _active: {
               boxShadow: '3d-pressed',
             },
-          },
-    [splitting]
+          }),
+      ...(!amountLeft
+        ? {
+            bg: 'gray.100',
+            boxShadow: '3d-pressed',
+          }
+        : {}),
+    }),
+    [splitting, amountLeft]
   )
 
   const handleClick = React.useCallback(() => {
-    if (!splitting) return
+    if (!splitting || !amountLeft) return
 
     dispatch(setActiveItem(item))
-  }, [item, splitting, dispatch])
+  }, [item, splitting, dispatch, amountLeft])
 
   return (
     <Stack spacing={1}>

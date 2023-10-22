@@ -1,7 +1,7 @@
 import {ReceiptItem} from '@/api/models'
 import {SettlementType} from '@/api/types'
 
-import {TransferItem, TransferItems, TransferRequestRecipients} from './types'
+import {TransferItemNoName, TransferItems, TransferRequestRecipients} from './types'
 
 export const settlementTypeToSymbol: Record<SettlementType, string> = {
   money: '',
@@ -9,10 +9,7 @@ export const settlementTypeToSymbol: Record<SettlementType, string> = {
   percentage: '%',
 }
 
-export const getTransferAmount = (
-  receiptItem: ReceiptItem,
-  transferItem: Omit<TransferItem, 'name'>
-): number => {
+export const getTransferAmount = (receiptItem: ReceiptItem, transferItem: TransferItemNoName): number => {
   if (!transferItem.settlement_type) return 0
 
   switch (transferItem.settlement_type) {
