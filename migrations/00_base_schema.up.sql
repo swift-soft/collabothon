@@ -70,8 +70,8 @@ create table "transactions" (
     "accounted_at" timestamptz,
     "title" text not null,
     "amount" int not null default 0,
-    "source_account" text references "accounts"("number") on delete cascade,
-    "destination_account" text references "accounts"("number") on delete cascade,
+    "source_account" text not null references "accounts"("number") on delete cascade,
+    "destination_account" text not null references "accounts"("number") on delete cascade,
 
     check(extract(timezone from "created_at") = '0')
 );

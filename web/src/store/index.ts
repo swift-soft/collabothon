@@ -9,6 +9,7 @@ import {supabase} from '@/api'
 import authReducer, {updateUser} from '@/auth/state'
 import receiptReducer from '@/pages/transaction/receipt/state'
 import {toast} from '@/theme'
+import transferRequestReducer from '@/transfer-requests/state'
 
 const rootReducer = combineReducers({
   auth: persistReducer(
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     authReducer
   ),
   receipt: receiptReducer,
+  transferRequest: transferRequestReducer,
 })
 
 export const store = configureStore({

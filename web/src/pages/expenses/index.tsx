@@ -79,7 +79,14 @@ const ExpensesPage = () => {
 
       <Stack>
         {filteredStats.map((s) => (
-          <Grid gridTemplateColumns="repeat(6, 1fr)" p={4} boxShadow="3d" rounded="xl" columnGap={2}>
+          <Grid
+            gridTemplateColumns="repeat(6, 1fr)"
+            p={4}
+            boxShadow="3d"
+            rounded="xl"
+            columnGap={2}
+            _active={{boxShadow: '3d-pressed'}}
+          >
             <GridItem colSpan={3}>
               <HStack>
                 <Box boxSize={4} rounded="full" bg={s.color} />

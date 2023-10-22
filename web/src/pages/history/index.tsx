@@ -1,10 +1,10 @@
-import {Box, HStack, Spinner, Stack, Text} from '@chakra-ui/react'
+import React from 'react'
+
+import {Center, Divider, HStack, Spinner, Stack, Text} from '@chakra-ui/react'
 import {Link} from 'react-router-dom'
 
 import {Transaction} from '@/api/models'
 import {selectProfile} from '@/auth/state'
-import Completed from '@/common/components/completed'
-import ConfirmAsk from '@/common/components/transferm-notification-model'
 import useListQuery from '@/common/hooks/use-list-query'
 import {useAppSelector} from '@/store'
 import {formatMoney, formatTransactionDate} from '@/utils/string.ts'
@@ -12,7 +12,18 @@ import {formatMoney, formatTransactionDate} from '@/utils/string.ts'
 const HistoryPage = () => {
   const user = useAppSelector(selectProfile)
 
-  const groupedByDay = (data) => {
+  const {data, loading, fetch} = useListQuery<Transaction, 'object'>({
+    from: 'user_transactions',
+    order: 'created_at',
+    descending: true,
+    returnType: 'object',
+    limit: 0,
+  })
+  React.useEffect(() => {
+    fetch()
+  }, [user]) // eslint-disable-line
+
+  const groupedByDay = React.useMemo(() => {
     return data.reduce((acc, transaction) => {
       const date = formatTransactionDate(transaction.created_at)
       if (!acc[date]) {
@@ -21,33 +32,25 @@ const HistoryPage = () => {
       acc[date].push(transaction)
       return acc
     }, {})
-  }
-
-  const {data, loading} = useListQuery<Transaction, 'object'>({
-    from: 'user_transactions',
-    order: 'created_at',
-    descending: true,
-    returnType: 'object',
-    limit: 0,
-  })
-
-  const groupedData = groupedByDay(data)
+  }, [data])
 
   return loading ? (
-    <Spinner />
+    <Center>
+      <Spinner />
+    </Center>
   ) : (
-    <Box>
-      <Stack bgColor="#ededed" padding="10px 14px">
+    <Stack w="full">
+      <Stack bgColor="#ededed" p={4} rounded="lg">
         <Text>Account balance</Text>
         <Text fontWeight="bold" fontSize="xl">
-          {formatMoney(user?.account_balance)}
+          {formatMoney(user?.account_balance)} PLN
         </Text>
       </Stack>
       {!data.length ? (
         <Text>No transactions found</Text>
       ) : (
-        Object.keys(groupedData).map((date) => (
-          <Box key={date}>
+        Object.keys(groupedByDay).map((date) => (
+          <Stack key={date} spacing={4}>
             <Text
               fontSize="lg"
               fontWeight="bold"
@@ -58,27 +61,24 @@ const HistoryPage = () => {
             >
               {date}
             </Text>
-            {groupedData[date].map((transaction) => (
-              <Link key={transaction.id} to={`/transaction/${transaction.id}`}>
-                <Box>
-                  <Box padding="10px 14px">
-                    <HStack justify="space-between">
-                      <Stack>
-                        <HStack color="black">
-                          <Text>{transaction.title}</Text>
-                        </HStack>
-                        {/* <Text textTransform="uppercase">{transaction.title}</Text> */}
-                      </Stack>
-                      <Text>{((transaction.amount / 100) * -1).toFixed(2)} PLN</Text>
-                    </HStack>
-                  </Box>
-                </Box>
-              </Link>
-            ))}
-          </Box>
+            <Stack divider={<Divider />} ml={2} spacing={4}>
+              {groupedByDay[date].map((transaction) => (
+                <Link key={transaction.id} to={`/transaction/${transaction.id}`}>
+                  <HStack justify="space-between">
+                    <Stack>
+                      <HStack color="black">
+                        <Text>{transaction.title}</Text>
+                      </HStack>
+                    </Stack>
+                    <Text>{formatMoney(transaction.amount)} PLN</Text>
+                  </HStack>
+                </Link>
+              ))}
+            </Stack>
+          </Stack>
         ))
       )}
-    </Box>
+    </Stack>
   )
 }
 
