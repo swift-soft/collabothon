@@ -42,10 +42,12 @@ export const useStatsState = () => {
       if (!range) return
 
       try {
-        const {data, error} = await supabase.rpc('get_user_stats', {
-          from: range?.from.toUTCString(),
-          to: range?.to.toUTCString(),
-        })
+        const {data, error} = await supabase
+          .rpc('get_user_stats', {
+            from: range?.from.toUTCString(),
+            to: range?.to.toUTCString(),
+          })
+          .returns<Stats>()
         if (error) throw error
         setStatistics(data)
       } catch (err) {

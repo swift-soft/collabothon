@@ -34,6 +34,7 @@ const Header = () => {
       w="100%"
       bg="white"
       zIndex="1"
+      shadow={'xl'}
     >
       <Box textAlign="center" onClick={() => navigate(-1)}>
         <ArrowBackIcon boxSize={5}></ArrowBackIcon>

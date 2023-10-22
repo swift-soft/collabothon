@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Avatar, Button, HStack, Heading, Spinner, Stack, Text} from '@chakra-ui/react'
+import {Avatar, Button, Center, HStack, Heading, Spinner, Stack, Text} from '@chakra-ui/react'
 import {Navigate, useNavigate} from 'react-router-dom'
 
 import {selectProfile, selectProfileLoading} from '@/auth/state'
@@ -21,7 +21,9 @@ const ProfilePage = () => {
   }, [user, navigate])
 
   return loading ? (
-    <Spinner />
+    <Center h={'full'}>
+      <Spinner />
+    </Center>
   ) : !user ? (
     <Navigate to="/" />
   ) : (

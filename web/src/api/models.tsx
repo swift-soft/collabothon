@@ -41,7 +41,11 @@ export type ReceiptJoined = Omit<Database['public']['Views']['receipts_joined'][
   items: ReceiptItem[]
 }
 
-export type Stats = Database['public']['Functions']['get_user_stats']['Returns']
+export type Stat = Omit<Database['public']['Functions']['get_user_stats']['Returns'][0], 'products'> & {
+  products: {name: string; price: number; amount: number; date: string}[]
+}
+
+export type Stats = Stat[]
 
 export type TransferRequest = Database['public']['Tables']['transfer_requests']['Row']
 

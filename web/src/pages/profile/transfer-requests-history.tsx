@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Box, Divider, HStack, Heading, Spinner, Stack, Text} from '@chakra-ui/react'
+import {Box, Center, Divider, HStack, Heading, Spinner, Stack, Text} from '@chakra-ui/react'
 import {useDispatch} from 'react-redux'
 
 import {TransferRequestDetails} from '@/api/models'
@@ -51,7 +51,9 @@ const TransferRequestsHistory = () => {
     <Stack spacing={4}>
       <Heading size="sm">Transfer requests</Heading>
       {loading ? (
-        <Spinner />
+        <Center h={'full'}>
+          <Spinner />
+        </Center>
       ) : (
         <Stack divider={<Divider />}>
           {data.map((t) => (
