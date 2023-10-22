@@ -15,8 +15,11 @@ import {
   GridItem,
   HStack,
   Icon,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
+  NumberInputStepper,
   Stack,
   Tab,
   TabIndicator,
@@ -135,7 +138,7 @@ const BillSplittingModal = () => {
                   amountLeft={amountLeft}
                 />
               ))}
-              {!!transferItem?.length && !!transferItem.at(-1)?.amount && !!amountLeft && (
+              {/* {!!transferItem?.length && !!transferItem.at(-1)?.amount && !!amountLeft && (
                 <Box px={4} py={2}>
                   <ContactSelect
                     value={null}
@@ -144,7 +147,7 @@ const BillSplittingModal = () => {
                     menuPlacement="top"
                   />
                 </Box>
-              )}
+              )} */}
             </Stack>
             <HStack px={4} justify="flex-end">
               <Text>Amount left:</Text>
@@ -175,6 +178,7 @@ type Props = {
 }
 
 const tabs: SettlementType[] = ['no_of_items', 'percentage', 'money']
+const defaultTabsValues = [1, 10000, 0]
 
 const TransferItemForm = ({item, index, onChange}: Props) => {
   const receiptItem = useAppSelector(selectActiveItem)
@@ -197,7 +201,9 @@ const TransferItemForm = ({item, index, onChange}: Props) => {
             position="relative"
             variant="unstyled"
             index={tabIndex < 0 ? 0 : tabIndex}
-            onChange={(tabIndex) => onChange(index, {...item, settlement_type: tabs[tabIndex], amount: 0})}
+            onChange={(tabIndex) =>
+              onChange(index, {...item, settlement_type: tabs[tabIndex], amount: defaultTabsValues[tabIndex]})
+            }
             isLazy
           >
             <TabList w="100%">
@@ -215,11 +221,12 @@ const TransferItemForm = ({item, index, onChange}: Props) => {
             <TabPanels>
               <TabPanel>
                 <Text>Select number of items</Text>
+
                 <NumberInput
                   w="100%"
-                  min={0}
-                  max={item.amount}
-                  precision={0}
+                  min={1}
+                  max={receiptItem?.amount}
+                  precision={1}
                   onChange={(_, v) =>
                     onChange(index, {
                       ...item,
@@ -227,9 +234,13 @@ const TransferItemForm = ({item, index, onChange}: Props) => {
                       amount: v > (receiptItem?.amount || 1) ? receiptItem?.amount : v,
                     })
                   }
-                  value={item.amount || ''}
+                  value={item.amount || '0'}
                 >
                   <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
                 </NumberInput>
               </TabPanel>
               <TabPanel>
