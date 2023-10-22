@@ -35,7 +35,7 @@ const HistoryPage = () => {
   }, [data])
 
   return loading ? (
-    <Center>
+    <Center h={'full'}>
       <Spinner />
     </Center>
   ) : (

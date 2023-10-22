@@ -1,4 +1,4 @@
-import {Box, Image, Spinner, Text} from '@chakra-ui/react'
+import {Box, Center, Image, Spinner, Text} from '@chakra-ui/react'
 import {Link} from 'react-router-dom'
 
 import {Transaction} from '@/api/models'
@@ -28,7 +28,9 @@ const Operations = () => {
   }, {})
 
   return loading ? (
-    <Spinner />
+    <Center h={'full'}>
+      <Spinner />
+    </Center>
   ) : (
     <Box>
       <Text fontSize="xl" fontWeight="semibold" mt={2}>
@@ -41,7 +43,7 @@ const Operations = () => {
           </Text>
           <Box marginTop="1px" marginBottom="20px" borderBottom="2px" borderColor="blackAlpha.500" />
           {transactions.map((transaction, index) => (
-            <Box key={index}>
+            <Box key={index} py={1}>
               <Link to={`transaction/${transaction.id}`}>
                 <Box mb={3} display="inline-flex" width="100%">
                   <Image

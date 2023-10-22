@@ -1,9 +1,29 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-import {Box, Button, Flex, Grid, GridItem, HStack, Stack, Text} from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  List,
+  ListIcon,
+  ListItem,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
+import {MdArrowForward} from 'react-icons/md'
 import {Cell, Label, Pie, PieChart, ResponsiveContainer} from 'recharts'
 
-import {formatMoney} from '@/utils/string'
+import {formatMoney, formatTransactionDate} from '@/utils/string'
 
 import {useStatsState} from './hooks'
 import {DateRange} from './types'
@@ -11,8 +31,20 @@ import {foramtTimeRange} from './utils'
 
 const buttons: DateRange[] = ['day', 'week', 'month', 'year']
 
+type ActiveItem = {
+  category: string
+  total: number
+  products: {
+    date: string
+    name: string
+    price: number
+    amount: number
+  }[]
+}
+
 const ExpensesPage = () => {
   const {statistics, range, activeTab, setActiveTab} = useStatsState()
+  const [activeItem, setActiveItem] = useState<ActiveItem | null>(null)
 
   const filteredStats = React.useMemo(
     () => statistics.filter((s) => !!s.total).sort((a, b) => b.total - a.total),
@@ -22,6 +54,19 @@ const ExpensesPage = () => {
   const total = React.useMemo(() => filteredStats.reduce((sum, s) => sum + s.total, 0), [filteredStats])
 
   const chartData = filteredStats.length > 0 ? filteredStats : [{name: '', total: 1}]
+
+  const groupedByDay = React.useMemo(() => {
+    return activeItem?.products.reduce((acc, expense) => {
+      const date = formatTransactionDate(expense.date) // Change this according to your data structure
+      if (!acc[date]) {
+        acc[date] = []
+      }
+      acc[date].push(expense)
+      return acc
+    }, {})
+  }, [activeItem?.products])
+
+  console.log(groupedByDay)
 
   return (
     <Stack>
@@ -86,6 +131,7 @@ const ExpensesPage = () => {
             rounded="xl"
             columnGap={2}
             _active={{boxShadow: '3d-pressed'}}
+            onClick={() => setActiveItem(s)}
           >
             <GridItem colSpan={3}>
               <HStack>
@@ -106,6 +152,51 @@ const ExpensesPage = () => {
           </Grid>
         ))}
       </Stack>
+
+      {activeItem && (
+        <Drawer isOpen={!!activeItem} onClose={() => setActiveItem(null)}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader fontSize={'3xl'} shadow={'2xl'}>
+              {activeItem?.category}
+              <Text fontSize={'xl'} color={'red.500'}>
+                {formatMoney(activeItem?.total)} zł
+              </Text>
+            </DrawerHeader>
+            <DrawerBody>
+              {Object.keys(groupedByDay).map((date) => (
+                <Box key={date} pb={3}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    mt={4}
+                    color="red"
+                    borderBottom="1px"
+                    pb={2}
+                    borderColor="lightgray"
+                  >
+                    {date}
+                  </Text>
+                  {groupedByDay[date].map((expense, index) => (
+                    <List key={index}>
+                      <ListItem py={3}>
+                        <Flex justify="space-between">
+                          <Text>{expense.name}</Text>
+                          <Text>
+                            {expense.amount} x {formatMoney(expense.price)} zł
+                            {/* it looks much better with zł*/}
+                          </Text>
+                        </Flex>
+                      </ListItem>
+                    </List>
+                  ))}
+                </Box>
+              ))}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )}
     </Stack>
   )
 }
